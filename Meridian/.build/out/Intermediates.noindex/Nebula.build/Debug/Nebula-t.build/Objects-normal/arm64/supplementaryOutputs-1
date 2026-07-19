@@ -1,0 +1,79 @@
+{
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Async/NebulaAsyncSequence.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAsyncSequence.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAsyncSequence.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAsyncSequence.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAsyncSequence.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAsyncSequence.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Async/NebulaResultPipeline.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaResultPipeline.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaResultPipeline.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaResultPipeline.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaResultPipeline.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaResultPipeline.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Domain/NebulaAggregate.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAggregate.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAggregate.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAggregate.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAggregate.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaAggregate.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Domain/NebulaEntity.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaEntity.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaEntity.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaEntity.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaEntity.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaEntity.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Domain/NebulaID.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaID.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaID.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaID.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaID.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaID.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Domain/NebulaValue.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValue.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValue.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValue.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValue.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValue.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Errors/NebulaDomainError.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaDomainError.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaDomainError.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaDomainError.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaDomainError.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaDomainError.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Errors/NebulaFailure.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaFailure.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaFailure.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaFailure.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaFailure.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaFailure.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Errors/NebulaValidationError.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValidationError.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValidationError.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValidationError.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValidationError.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaValidationError.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Gateway/NebulaGateway.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGateway.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGateway.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGateway.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGateway.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGateway.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Sources/Nebula/Architecture/Gateway/NebulaGatewayConfig.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGatewayConfig.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGatewayConfig.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGatewayConfig.dia",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGatewayConfig.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Nebula.build/Debug/Nebula-t.build/Objects-normal/arm64/NebulaGatewayConfig.swiftdeps"
+  }
+}

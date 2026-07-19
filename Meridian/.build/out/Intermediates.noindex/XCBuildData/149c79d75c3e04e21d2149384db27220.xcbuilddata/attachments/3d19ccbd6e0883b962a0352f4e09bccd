@@ -1,0 +1,4 @@
+module Nebula {
+header "Nebula-Swift.h"
+export *
+}

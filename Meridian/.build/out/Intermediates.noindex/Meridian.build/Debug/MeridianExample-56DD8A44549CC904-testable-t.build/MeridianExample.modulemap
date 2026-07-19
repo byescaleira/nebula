@@ -1,0 +1,4 @@
+module MeridianExample {
+header "MeridianExample-Swift.h"
+export *
+}

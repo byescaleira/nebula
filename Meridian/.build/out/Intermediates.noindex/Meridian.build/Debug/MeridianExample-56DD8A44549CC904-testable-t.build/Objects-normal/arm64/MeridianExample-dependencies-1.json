@@ -1,0 +1,711 @@
+[
+  {
+    "isFramework" : true,
+    "moduleName" : "Accessibility",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Accessibility.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "AppKit",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/AppKit.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "ColorSync",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/ColorSync.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Combine",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Combine.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreAudio",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreAudio.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreData",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreData.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreFoundation",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreFoundation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreGraphics",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreGraphics.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreImage",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreImage.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreMedia",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreMedia.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreText",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreText.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreTransferable",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreTransferable.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreVideo",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CoreVideo.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CryptoKit",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/CryptoKit.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Darwin",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Darwin.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "DataDetection",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/DataDetection.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "DeveloperToolsSupport",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/DeveloperToolsSupport.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Dispatch",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Dispatch.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Foundation",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Foundation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "IOKit",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/IOKit.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "ImageIO",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/ImageIO.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "LocalAuthentication",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/LocalAuthentication.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Meridian",
+    "modulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/Products\/Debug\/Meridian.swiftmodule\/arm64-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Metal",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Metal.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Nebula",
+    "modulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/Products\/Debug\/Nebula.swiftmodule\/arm64-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "OSLog",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/OSLog.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "ObjectiveC",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/ObjectiveC.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Observation",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Observation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "QuartzCore",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/QuartzCore.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "RegexBuilder",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/RegexBuilder.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Spatial",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Spatial.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Swift",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Swift.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "SwiftOnoneSupport",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/SwiftOnoneSupport.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "SwiftUI",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/SwiftUI.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "SwiftUICore",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/SwiftUICore.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Symbols",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Symbols.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Synchronization",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/Synchronization.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "System",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/System.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "UniformTypeIdentifiers",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/UniformTypeIdentifiers.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "XPC",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/XPC.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_Builtin_float",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/_Builtin_float.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_Concurrency",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/_Concurrency.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation1",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/_DarwinFoundation1.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation2",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/_DarwinFoundation2.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation3",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/_DarwinFoundation3.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_StringProcessing",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/_StringProcessing.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "os",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/os.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "simd",
+    "modulePath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/27.0\/simd.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Accessibility.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Accessibility-C1DKI4N809GJROE2E42UZIKFT.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Accessibility"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/AppKit.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/AppKit-2MG1AWGN0UV047TQCBRPH4LPV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "AppKit"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ApplicationServices.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/ApplicationServices-D3W1WGSH753YD7E5LEW16OT2O.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ApplicationServices"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CFNetwork.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CFNetwork-48MJ6Q3ZBWK9TWGFDKFJA825E.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CFNetwork"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/cups.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CUPS-ACKFPH9ZJ82MQUFEZ5LU8X52F.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CUPS"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ColorSync.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/ColorSync-93HXJU414PYFFOR7ER19MWMNZ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ColorSync"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreAudio.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreAudio-D97F4OH577CQTGDQK891HD459.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreAudio"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreAudioTypes.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreAudioTypes-DXJIDEV066TRLS7N741N4CYDZ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreAudioTypes"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreData.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreData-5XVGUY6JCLJK7HPENKCLFN5GW.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreData"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreFoundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreFoundation-CUY6B0HBNNPUQ6NTVRKWII8HQ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreFoundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreGraphics.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreGraphics-290T6VFCML5CD3MDORZ5TEHJ9.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreGraphics"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreImage.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreImage-87DTSWOFRNWBE12BZGL2HTOAU.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreImage"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreMedia.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreMedia-5WA8J6WKL8WHZHYN6T7F8V7Z.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreMedia"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreServices.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreServices-ESNKF70QOUGV01OQR0EU8KHIY.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreServices"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreText.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreText-2TA8HM1QCYN9OFTQY9HMZL8YP.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreText"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreTransferable.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreTransferable-DT6PXE7WPAM9OJ7WRF9144J2W.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreTransferable"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreVideo.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/CoreVideo-9KQWNXF2H9BCMM1LF8EDY5V5P.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreVideo"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/Darwin.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Darwin-C9CED0TLCFUI94NSRYUP6150A.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Darwin"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/DataDetection.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/DataDetection-E6V9V5AUSKRFAAAUVNLKMYVLH.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "DataDetection"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/DeveloperToolsSupport.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/DeveloperToolsSupport-F3OXENASBH9XWWEBLYXD8HHPQ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "DeveloperToolsSupport"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/DiskArbitration.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/DiskArbitration-5HEJJ5XRXRBJTS97R95P6X2NN.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "DiskArbitration"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/dispatch.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Dispatch-QRPW2K8A0JSZLOYP786GB5X3.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Dispatch"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Foundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Foundation-78L620OQCP8B06PC36LX1UGCN.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Foundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/IOKit.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/IOKit-B3TKPF4JL83D61V4F9LZPO8GC.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "IOKit"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/IOSurface.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/IOSurface-1VX4AP9POXCEI03HR86DGSGUK.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "IOSurface"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ImageIO.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/ImageIO-DUFPBVGEU8FG6ZTA40XYH913H.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ImageIO"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/LocalAuthentication.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/LocalAuthentication-5QLD222M0LR751CVEM5WVT83J.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "LocalAuthentication"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinBasic.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/MachO-4MGN1ZFHJ1MA8POG0SHKOT2NU.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "MachO"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Metal.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Metal-6OTDZWHFZX0JY0MD2IA74TUCB.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Metal"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/OSLog.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/OSLog-8R7ONKZDFFI2LI9WKD91O9LGA.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "OSLog"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/ObjectiveC.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/ObjectiveC-E66HUBODQQF5JCJAVENSC3P6I.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ObjectiveC"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/OpenGL.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/OpenGL-5M1TW5CPEGZTAJJGRLP4TE2AE.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "OpenGL"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/QuartzCore.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/QuartzCore-782ALYDEAJL34KZN4XU18BUYP.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "QuartzCore"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Security.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Security-DTDFTNV6BMXXMBEU4CFH43Y80.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Security"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/Spatial\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Spatial-DHIKB1J6X502XNPYI9DXYQPWP.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Spatial"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/SwiftShims-2ZS6VQNHWO8DANZ0UBXJ2VQA6.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftShims"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/SwiftUI.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/SwiftUI-70Y6RWLS3GBAC9IQHE6N09P7K.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftUI"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/SwiftUICore.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/SwiftUICore-8LBVLDBY67D9QXG5YSF2W6LKN.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftUICore"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Symbols.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/Symbols-9MT5YK6ZLGB61ZB99OBNBNQS8.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Symbols"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/UniformTypeIdentifiers.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/UniformTypeIdentifiers-DZX1DWM99PFDXS8DU660R0A8H.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "UniformTypeIdentifiers"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/xpc.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/XPC-5Z6D3AVT91NMF0Z8W0ZZT1QMP.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "XPC"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_AvailabilityInternal-9VVMC2UYQLPWSF1SY4P4LQYTV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_AvailabilityInternal"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_float-H9W8J4D72MHI48PBESDH96XM.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_float"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_intrinsics-E2P5ADMRU0IM2EB81TKJPLCNI.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_intrinsics"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_inttypes-74KPB6CNHIUK2XOH0EZLCFHZV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_inttypes"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_limits-WUHWWBRM8DN8R8F4BEQNB2FB.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_limits"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_stdarg-66NXT3ECLYRVBD0Y9H7BZ1E3O.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdarg"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_stdatomic-APPTCBZ7A7AY1892UKSZ437QO.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdatomic"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_stdbool-9NAH2CMOJQAQZSE7ML7GNVAT2.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdbool"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_stddef-DQBB311N71T473D2N8AY4WMP2.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stddef"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_stdint-APOL3EL0GUJJLG81G946WJRAJ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdint"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_Builtin_tgmath-23TX18GFYRKIL1GL20H85ZV8Z.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_tgmath"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_DarwinFoundation1-B6NNFQ3NCZYW9LUW62MSJ5TDL.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation1"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_DarwinFoundation2-8NOZWMHX2YIG4Y06BH9MHVFN8.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation2"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation3.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_DarwinFoundation3-CYT34OCEFUW7G7FV5ESY25QQB.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation3"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/_SwiftConcurrencyShims-27JKP11V2RN664D9YQXOC9E7J.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_SwiftConcurrencyShims"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/launch.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/launch-7D1IE301SNI07HNIEFBT2K3WC.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "launch"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/libDER\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/libDER-BK5OC4PNKR3Q4ME4XMPVCVKJ6.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "libDER"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/libkern.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/libkern-894NV6WIKKOOF72HK5EB32AIN.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "libkern"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/os-EI7A4W7W465DIP3KL97F8UWMF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/os_object-2AJLD7T05T3U5S5PLM6VPEWSW.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os_object"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/os_workgroup-QSB01C73XDNZZX0BEKUH4MV5.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os_workgroup"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/ptrauth-ESOUSZL1PJ8C5PBIVOVO4SMRJ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ptrauth"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/ptrcheck-XMC9GJTNH5VKLVZCAT55T5CQ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ptrcheck"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/simd\/module.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/simd-EL059NB711S8TNU081GBCRV9K.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "simd"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/c_standard_library.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/string_h-5TIY4IUFRBTFFK4U9MJZ99PCF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "string_h"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode-27.0.0-Beta.3.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath" : "\/Users\/rafael.escaleira\/Documents\/projects\/personal\/nebula\/Meridian\/.build\/out\/SDKExplicitPrecompiledModules\/sys_types-BCMEG33ABGV5NU245G4AN8A4Z.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "sys_types"
+  }
+]

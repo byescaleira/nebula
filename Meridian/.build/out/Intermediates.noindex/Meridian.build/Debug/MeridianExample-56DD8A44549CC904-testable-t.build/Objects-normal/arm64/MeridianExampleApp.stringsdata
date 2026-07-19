@@ -1,0 +1,56 @@
+{
+  "source": "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/Sources/MeridianExample/MeridianExampleApp.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "Meridian Example",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 113
+        }
+      },
+      {
+        "comment": "",
+        "key": "Detail %@",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "Detail",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 121
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 127
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 128
+        }
+      }
+    ]
+  },
+  "version": 1
+}

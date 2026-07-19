@@ -1,0 +1,21 @@
+{
+  "" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary.dia",
+    "emit-module-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary-emit-module.dia",
+    "pch" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Meridian-primary.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/Sources/Meridian/MeridianNavigationStack.swift" : {
+    "index-unit-output-path" : "/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/MeridianNavigationStack.o",
+    "llvm-bc" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/MeridianNavigationStack.bc",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/MeridianNavigationStack.o"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/Sources/Meridian/Router.swift" : {
+    "index-unit-output-path" : "/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Router.o",
+    "llvm-bc" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Router.bc",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Release/Meridian-t.build/Objects-normal/arm64/Router.o"
+  }
+}

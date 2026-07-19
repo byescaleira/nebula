@@ -1,0 +1,39 @@
+{
+  "" : {
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/MeridianTests-primary.dia",
+    "emit-module-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/MeridianTests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/MeridianTests-primary-emit-module.dia",
+    "pch" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/MeridianTests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/MeridianTests-primary.swiftdeps"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/DerivedSources/test_entry_point.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.dia",
+    "index-unit-output-path" : "/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.o",
+    "llvm-bc" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.bc",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point.swiftdeps",
+    "swiftmodule" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/test_entry_point~partial.swiftmodule"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/Tests/MeridianTests/DeepLinkTests.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.dia",
+    "index-unit-output-path" : "/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.o",
+    "llvm-bc" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.bc",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests.swiftdeps",
+    "swiftmodule" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/DeepLinkTests~partial.swiftmodule"
+  },
+  "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/Tests/MeridianTests/RouterTests.swift" : {
+    "const-values" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.swiftconstvalues",
+    "dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.d",
+    "diagnostics" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.dia",
+    "index-unit-output-path" : "/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.o",
+    "llvm-bc" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.bc",
+    "object" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.o",
+    "swift-dependencies" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests.swiftdeps",
+    "swiftmodule" : "/Users/rafael.escaleira/Documents/projects/personal/nebula/Meridian/.build/out/Intermediates.noindex/Meridian.build/Debug/MeridianTests-p.build/Objects-normal/arm64/RouterTests~partial.swiftmodule"
+  }
+}
