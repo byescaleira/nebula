@@ -50,9 +50,14 @@ Nebula/
 │   ├── Extensions/          # DateTime/ String/ Number/ Primitive/ Collection/ Codable/ DataURL
 │   ├── Standardize/         # NebulaStandards + NebulaStandardsConfig (FormatStyle façades)
 │   ├── Measure/             # NebulaMeasureConfiguration + NebulaMeasureResult + NebulaMeasureConfig
-│   └── Architecture/        # Clean Architecture toolkit — seams only (domain/ports/use case/repository/gateway/validation/registry/testing/async)
+│   └── Architecture/        # Clean Architecture toolkit — seams only (domain/ports/use case/repository/gateway/validation/registry/testing/async) + Presentation/ (Foundation-only nav model)
 └── Tests/
     └── NebulaTests/          # Swift Testing — mirrors source layout
+
+Meridian/                      # Sibling SPM package (SwiftUI) — depends on Nebula via ../
+├── Sources/Meridian/         # @Observable Router + MeridianNavigationStack + DocC
+├── Sources/MeridianExample/  # @main App — compile gate / living docs (NOT shipped)
+└── Tests/MeridianTests/      # Swift Testing — Router / DeepLink / Destination
 ```
 
 ## Configuration contracts
@@ -161,7 +166,7 @@ Gate `DateComponents.formatted(_:)` + `DateComponents.ISO8601FormatStyle` + `.is
 
 ## Architecture
 
-`Sources/Nebula/Architecture/` is the **second surface** of Nebula: the Clean Architecture toolkit. It ships **only the seams** — inner-owned marker protocols, a DTO contract, repository/gateway ports, a use-case type, validators, a registry, test doubles, and async-flow helpers — so an app can implement Clean Architecture efficiently without Nebula owning any presentation, database, or framework code. Concrete adapters (repositories, gateways, presenters, URLSession networking) live in the app; Cosmos, the SwiftUI sibling, is the presentation layer. Presentation patterns (MVVM / MVC / VIP / VIPER) are explicitly out of scope. The toolkit is pure Swift + Foundation + `Synchronization`; every symbol sits at the Nebula 26 floor (no above-floor gates). The DocC catalog (`Sources/Nebula/Nebula.docc/Architecture.md`) is the canonical article.
+`Sources/Nebula/Architecture/` is the **second surface** of Nebula: the Clean Architecture toolkit. It ships **only the seams** — inner-owned marker protocols, a DTO contract, repository/gateway ports, a use-case type, validators, a registry, test doubles, async-flow helpers, and the Foundation-only navigation model — so an app can implement Clean Architecture efficiently without Nebula owning any database or framework code. Concrete adapters (repositories, gateways, presenters, URLSession networking) live in the app; the SwiftUI presentation layer lives in the **Meridian** sibling package (`Meridian/`, see [Presentation (Meridian)](#presentation-meridian)). Nebula itself owns no presenter and no SwiftUI. The toolkit is pure Swift + Foundation + `Synchronization`; every symbol sits at the Nebula 26 floor (no above-floor gates). The DocC catalog (`Sources/Nebula/Nebula.docc/Architecture.md`) is the canonical article.
 
 | Subtree | Responsibility |
 |---|---|
@@ -175,8 +180,24 @@ Gate `DateComponents.formatted(_:)` + `DateComponents.ISO8601FormatStyle` + `.is
 | `Registry/` | `NebulaRegistryKey` (open struct) + `NebulaRegistryConfiguration` + `NebulaRegistry` (explicit injection) + `NebulaRegistryConfig` (process-wide). DI **without** a container. |
 | `Testing/` | In-target test doubles `NebulaFakeRepository`/`NebulaStubUseCase`/`NebulaSpyUseCase` (`final class` + `let Mutex`; `Sendable` **derived** — final class with all-`let` `Sendable` properties, no `@unchecked`). |
 | `Async/` | `NebulaResultPipeline<T>` (`map`/`flatMap`/`recover` over `Result<T, NebulaError>`) + `AsyncSequence.nebulaChunked(byCount:)`/`nebulaUniqued(on:)`. |
+| `Presentation/` | Foundation-only navigation model: `NebulaRoute` (marker: `Hashable`/`Sendable`/`Codable`), `NebulaNavigationStack<Route>` (the typed `[Route]` stack — single source of truth via `static` stack mutators), `NebulaRouter<Route>: Sendable` (**async** navigation-intent port), `NebulaViewModel` (bare marker), `NebulaSpyRouter<Route>` (test double). No SwiftUI here — Meridian binds it. |
 
 All public value types derive `Sendable`. The toolkit introduces **no** `@unchecked Sendable`: the two `final class` test-helpers (`NebulaFakeRepository`, `NebulaSpyUseCase`) derive `Sendable` (a `final class` with all-`let` `Sendable` properties synthesizes `Sendable`; `Mutex` is `Sendable` when its value is), needing no `@unchecked`. They are `final class` rather than `struct` because a `Mutex`-typed stored property propagates `~Copyable` to an owning *struct* — a non-copyable double is awkward to pass around a test; the class absorbs the `~Copyable` `Mutex` behind a copyable reference (the `NebulaError.Box` derived-Sendable-`final class` precedent, not the `NebulaMemoryLogHandler` `@unchecked` exception). The 10 locked design decisions and the consolidated risks live in the vault (`03-padroes/nebula-clean-architecture-toolkit.md`, `08-riscos/clean-architecture-toolkit-risks.md`, `08-riscos/clean-architecture-open-questions.md`); the ADR is in `DECISIONS.md`.
+
+<a name="presentation-meridian"></a>
+
+## Presentation (Meridian)
+
+The presentation architecture is **MVVM `@Observable` + native typed-`[Route]` Router pattern** (no Coordinator tree — owner preference). It is split across two packages so the Clean Architecture dependency rule is **compiler-enforced**, not convention:
+
+- **Nebula** ships the Foundation-only **navigation model** under `Sources/Nebula/Architecture/Presentation/`: `NebulaRoute` (the route contract: `Hashable`/`Sendable`/`Codable`), `NebulaNavigationStack<Route>` (the typed `[Route]` stack — the "real navigation model" that holds push/pop/popToRoot/replaceStack logic once, in `static` mutators, with instance API delegating), `NebulaRouter<Route>: Sendable` (the **async** navigation-intent port), `NebulaViewModel` (a bare `Sendable` marker — Nebula ships no `@Observable`), and `NebulaSpyRouter<Route>` (a `Mutex`-backed test double). None of this imports SwiftUI.
+- **Meridian** (`Meridian/`, a separate local SwiftPM package depending on Nebula via `../`) ships the SwiftUI binding: `@MainActor @Observable public final class Router<Route: NebulaRoute>: NebulaRouter<Route>` and `MeridianNavigationStack` (a `NavigationStack(path:)` + `navigationDestination(for:)` wrapper). One `Router`/`MeridianNavigationStack` per tab.
+
+**Why the port is async.** Nebula has no default actor isolation (no SwiftUI → no `@MainActor`), yet the concrete `@MainActor @Observable` Meridian `Router` must conform to a Nebula port. The fix is the canonical Swift 6 idiom: `NebulaRouter`'s requirements are `async`; a synchronous `@MainActor` method **witnesses a nonisolated async requirement** (the `await` performs the actor hop). This keeps Nebula `@MainActor`-free while letting the on-actor `@Observable` Router conform — no SE-0411 isolated conformances (experimental/above-floor), no `@unchecked Sendable` on the Router (it is `Sendable` by `@MainActor` isolation). The async port is also the **cross-actor bridge**: a non-MainActor deep-link parser can `await router.replaceStack(with:)` to drive the UI.
+
+**Why a sibling package.** Meridian is a *separate* package so `import Meridian` from inside Nebula is an unconditional hard compile error — the Clean Architecture rule "use cases / domain never import presentation" is enforced across packages (SR-1393 only blocks cross-module access *within one package's* `.build`; a separate module graph defeats it). This closes the Wave H open risk. Meridian lives as a subdir package (`Meridian/`, `path: "../`) in this repo — one repo, one CI; promoting it to its own public git repo is a documented future step. Versioning: Meridian N ↔ Nebula N ↔ OS N, in lockstep (`VERSIONING.md`).
+
+Two patterns the foundation enables (DocC article `Meridian.docc/NavigationPatterns.md`, runnable `MeridianExample` executable as compile gate): **deep link as data** — a pure `URL → [Route]` function, asserted as a value, then `router.replaceStack(with:)`; and **type-driven modal destinations** — a single `Optional<Destination>` enum drives `sheet(item:)`, so "edit sheet AND delete alert showing" is a state the compiler refuses (no `@CasePathable` macro — `dependencies: []`). Vault: `03-padroes/nebula-presentation-architecture.md`, `nebula-presentation-seams.md`, `nebula-meridian-router.md`, `nebula-presentation-destinations-deeplink.md`; risks `08-riscos/presentation-architecture-risks.md`; ADR in `DECISIONS.md`.
 
 ## Concurrency
 

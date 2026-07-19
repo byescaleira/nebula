@@ -7,7 +7,108 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+## [0.3.0] - 2026-07-19
+
+> Nebula 0.3.0 / Meridian 0.3.0 — aligned to OS 26 (Liquid Glass). Presentation
+> architecture: MVVM `@Observable` + native typed-`[Route]` Router (no Coordinator
+> tree), shipped as Foundation-only seams in Nebula + a sibling **Meridian**
+> SwiftPM package that owns SwiftUI. `import Meridian` from Nebula is a hard
+> compile error → the Clean Architecture dependency rule is compiler-enforced
+> across packages. The `NebulaRouter` port is **async** so the `@MainActor
+> @Observable` Meridian `Router` conforms while Nebula stays `@MainActor`-free.
+> 525 Nebula tests / 13 Meridian tests green; zero concurrency warnings under
+> Swift 6 mode. Build-verified on all 5 platforms (iOS/macOS/tvOS/watchOS/visionOS).
+
+### Added — Wave I (presentation architecture, Foundation-only seams)
+- **Architecture/Presentation** — the Foundation-only presentation half of the
+  data-driven `Router` pattern (the sibling **Meridian** package, Wave II, owns
+  the `@Observable Router` + `NavigationStack` wiring). Five symbols, all pure
+  `import Foundation` (+ `import Synchronization` for the spy):
+  - `NebulaRoute` — `protocol: Hashable, Sendable, Codable`; the route contract
+    an app's `Route` enum conforms to (push identifier values, render models).
+  - `NebulaNavigationStack<Route>` — a typed `[Route]` navigation **model** as a
+    `Sendable`/`Codable`/`Equatable` value type: `push`/`pop`/`popToRoot`/
+    `replaceStack`. Stack logic in `static func …(into: inout [Route])` — single
+    source of truth shared by the instance API and (Wave II) the `@Observable`
+    Router. Deep links = "build `[Route]`, `replaceStack`" — pure data, testable
+    without a simulator. Typed `[Route]` preferred over type-erased
+    `NavigationPath` (compile-time exhaustive handling, inspectable/reorderable
+    stack — defensive vs `NavigationStack`'s reported macOS bugs, risk #4).
+  - `NebulaRouter<Route>` — the navigation-intent **port**, primary associated
+    type `Route` (SE-0346), `Sendable`, with **`async`** requirements
+    (`push`/`pop()`/`pop(_:)`/`popToRoot`/`replaceStack`). Async is the Swift 6
+    way to let a `@MainActor @Observable` concrete `Router` (Meridian) satisfy a
+    nonisolated, Foundation-only port: a synchronous `@MainActor` method witnesses
+    a nonisolated `async` requirement (the `await` hops to the main actor), so
+    Nebula stays free of `@MainActor` (app supplies isolation) yet the on-actor
+    router conforms. The async port is also the cross-actor bridge for off-actor
+    deep-link parsers. Conformers keep **synchronous** implementations (a sync
+    method witnesses an async requirement) — concrete calls stay sync.
+  - `NebulaViewModel` — bare `Sendable` marker; Nebula ships **only the marker**
+    (NOT `@Observable` — Swift 6 friction outside SwiftUI; the consumer adds
+    `@MainActor @Observable`).
+  - `NebulaSpyRouter<Route>` — spy router recording every intent as a value
+    (`Intent` enum `Sendable`/`Equatable`); `final class` + `let Mutex`,
+    `Sendable` **derived** (no `@unchecked`), mirroring `NebulaSpyUseCase`.
+    Conforms to `NebulaRouter` — a drop-in substitute for the port in tests.
+- Tests: `ArchitecturePresentationTests.swift` — navigation model ops, deep-link
+  `replaceStack`, `Codable` round-trip (state restoration), `Sendable`-across-
+  tasks, spy intent recording, and port-conformance through `any NebulaRouter<R>`.
+  525 tests / 110 suites green (+16 over 0.2.0); zero concurrency warnings under
+  Swift 6 mode. New files have no `#if os()` (Foundation + Synchronization only).
+
+### Added — Wave II (Meridian, the presentation-architecture sibling package)
+- **`Meridian/`** — a NEW separate local SwiftPM package (its own `Package.swift`,
+  module graph, and DocC catalog) in this repo, depending on Nebula via
+  `.package(name: "Nebula", path: "../")`. Where Nebula is Foundation-only,
+  Meridian swallows SwiftUI. `swift-tools-version: 6.3`, language mode v6, all 5
+  platforms `.v26`, `defaultLocalization: en`; `dependencies` lists only the local
+  Nebula sibling (SwiftUI is a system framework, not an SPM dep) → third-party-free.
+  One repo / one CI lane builds both; promoting Meridian to its own git repo for
+  public consumption is a documented future step (the `path` dep becomes a URL).
+  The separation is load-bearing: `import Meridian` from inside Nebula is an
+  **unconditional hard compile error** (Nebula `dependencies: []`), so the Clean
+  Architecture dependency rule (use cases/domain never import presentation) is
+  compiler-enforced across packages — closing the Wave H open risk (SR-1393 only
+  applies within one package's shared `.build`). Mirrors `swift-navigation`.
+- `Router<Route: NebulaRoute>` — `@MainActor @Observable final class` conforming to
+  `NebulaRouter<Route>`; owns the observation-tracked `var path: [Route]`; intent
+  methods (`push`/`pop()`/`pop(_:)`/`popToRoot`/`replaceStack`) delegate to
+  `NebulaNavigationStack` statics (single source of truth shared with the pure-Swift
+  model). `Sendable` by `@MainActor` isolation (no `@unchecked`). The data-driven
+  Router pattern — one per tab — NOT a Coordinator tree (owner preference).
+- `MeridianNavigationStack<Route, Root, Destination>` — a `View` wiring
+  `NavigationStack(path: $router.path)` + `navigationDestination(for: Route.self)`
+  with a `@ViewBuilder` destination resolver (the type-driven view factory).
+- **Async port conformance fix**: `NebulaRouter`'s requirements are `async`
+  (Wave I) precisely so this `@MainActor` `Router` can conform to a nonisolated,
+  Foundation-only port — a synchronous `@MainActor` method witnesses a nonisolated
+  `async` requirement (the `await` hops to the main actor). Nebula stays free of
+  `@MainActor`; the async port doubles as the cross-actor bridge for off-actor
+  deep-link parsers. Conformers keep sync impls — concrete calls stay synchronous.
+- Tests: `Meridian/Tests/MeridianTests/RouterTests.swift` — push/pop/replaceStack
+  as data, deep-link, port-conformance through `any NebulaRouter<R>` (async hop),
+  `@MainActor` Sendable, `Codable` path round-trip. 6 tests / 1 suite green; zero
+  concurrency warnings. `@Suite @MainActor` (constructing `Router` requires the
+  main actor).
+
+### Added — Wave III (destinations + deep-link + example)
+- **`MeridianExample`** — a runnable executable target demonstrating the full
+  pattern: `Router<AppRoute>` + `MeridianNavigationStack` + a type-driven
+  `Destination` enum driving `sheet(item:)` ("impossible states unrepresentable")
+  + an `onOpenURL` deep-link handler. `@main App`; compiling it is the Wave III
+  gate; `swift run MeridianExample` launches the macOS app. NOT a shipped product.
+- **Type-driven destinations** (pattern): a single `Optional<Destination>` enum
+  per feature drives `sheet(item:)` — only one destination active, compiler-
+  enforced (no `@CasePathable` macro — `dependencies: []`; `Identifiable` hand-
+  rolled). Documented in `Meridian.docc/NavigationPatterns.md`.
+- **Deep-link-as-data** (pattern): a pure `URL → [Route]` parser; `replaceStack`
+  is the deep-link primitive; the async `NebulaRouter` port is the cross-actor
+  bridge to the `@MainActor` router. `Codable` `Route` → state restoration.
+- Tests: `Meridian/Tests/MeridianTests/DeepLinkTests.swift` — deep-link parse →
+  `[Route]` assertions, `replaceStack` via the async port, `Destination`
+  `Identifiable` + single-optional "impossible states" assertions. 7 new tests
+  (13 total / 3 suites in Meridian), zero warnings.
 
 ## [0.2.0] - 2026-07-19
 

@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-07-19 (Wave H — Clean Architecture toolkit shipped. Waves A–H shipped; 509 tests green.)
+> Last updated: 2026-07-19 (Waves I–III — presentation architecture + Meridian shipped. Waves A–H + I–III shipped; 525 Nebula tests / 13 Meridian tests green.)
 >
 > This roadmap reflects the project state **after the foundation research cycle** that produced
 > the 12 verified research dimensions. The vault notes (`01-fundamentos/` + `03-padroes/`) are the
@@ -70,6 +70,32 @@
 
 ### Deferred (tracked below in "Later")
 - `NebulaInvariant` (decision #6), `NebulaMockRepository` (#8), `NebulaHTTPGateway` (#8-resolved), `NebulaCancellation`/`NebulaError.wrapAsync` (#13), template multi-module product (#10).
+
+## Done (0.3.0 — Presentation architecture + Meridian)
+
+### Wave I — Nebula Foundation-only presentation seams — DONE
+- [x] `Sources/Nebula/Architecture/Presentation/` — `NebulaRoute` (marker: `Hashable`/`Sendable`/`Codable`), `NebulaNavigationStack<Route>` (typed `[Route]` stack; single source of truth via `static` stack mutators, instance API delegates), `NebulaRouter<Route>: Sendable` (**async** navigation-intent port), `NebulaViewModel` (bare `Sendable` marker — Nebula ships no `@Observable`), `NebulaSpyRouter<Route>` (`Mutex`-backed test double). No SwiftUI.
+- [x] Async port — the Swift 6 conformance fix: a sync `@MainActor` method witnesses a nonisolated async requirement (await hops the actor), so Nebula stays `@MainActor`-free while the Meridian `@Observable` Router conforms. Two `pop` requirements (`pop()` + `pop(_ count:)`) because default args are illegal in protocol methods.
+- [x] Tests — `ArchitecturePresentationTests` (16 tests). 525 Nebula tests green; zero concurrency warnings (`rm -rf .build && swift build && swift test && swift build -c release`).
+- [x] DocC — `ArchitecturePresentation.md` canonical article; vault `03-padroes/nebula-presentation-seams.md`.
+
+### Wave II — Meridian package scaffold — DONE
+- [x] `Meridian/` sibling SwiftPM package (`Package.swift`: `swift-tools-version: 6.3`, `swiftLanguageModes: [.v6]`, 5 platforms `.v26`, `defaultLocalization: "en"`, `.package(name: "Nebula", path: "../")`). One repo, one CI, separate module graph → `import Meridian` from Nebula is a hard compile error (closes Wave H open risk; SR-1393 only applies within one package's `.build`).
+- [x] `@MainActor @Observable public final class Router<Route: NebulaRoute>: NebulaRouter<Route>` — sync `@MainActor` impls delegating to `NebulaNavigationStack` statics (witness async port via hop); `Sendable` by `@MainActor` isolation (no `@unchecked`).
+- [x] `MeridianNavigationStack` — `NavigationStack(path:)` + `navigationDestination(for:)` wrapper, `@Bindable` binding.
+- [x] Tests — `RouterTests` (6 tests). 6 Meridian tests green; zero warnings; release clean. Vault `03-padroes/nebula-meridian-router.md`.
+
+### Wave III — enum destinations + deep-link + example — DONE
+- [x] `MeridianExample` executable target (`@main App`) — `Router<AppRoute>` + `MeridianNavigationStack` + `Destination` enum sheet + `onOpenURL` deep link. Compile gate / living docs (NOT a shipped product).
+- [x] Pattern 1 — deep link as data: pure `URL → [Route]` function, asserted as a value, then `router.replaceStack(with:)`.
+- [x] Pattern 2 — type-driven modal destinations: single `Optional<Destination>` enum drives `sheet(item:)` ("impossible states unrepresentable", no `@CasePathable` — `dependencies: []`).
+- [x] Tests — `DeepLinkTests` (7 tests). 13 Meridian tests / 3 suites green; zero warnings; release clean (incl. executable). Vault `03-padroes/nebula-presentation-destinations-deeplink.md`; DocC `Meridian.docc/NavigationPatterns.md`.
+
+### Wave IV — ADR + versioning + final gate — DONE
+- [x] `DECISIONS.md` — presentation-architecture ADR (option d, async port, sibling package). `VERSIONING.md` — Meridian N ↔ Nebula N ↔ OS N lockstep policy. `ARCHITECTURE.md` — Presentation (Meridian) section + subtree row. This roadmap.
+- [x] Vault — `presentation-architecture-open-questions.md` Q4 marked decided (d); `vault/Home.md` index updated.
+- [ ] Tag `0.3.0` — ready to tag (user action)
+- [ ] Promote Meridian to its own public git repo + tag stream (documented future step; until then Meridian ships untagged, consumed by path)
 
 ## Later (post-0.1.0)
 
