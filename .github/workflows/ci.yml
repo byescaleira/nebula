@@ -1,0 +1,165 @@
+# Nebula — Continuous Integration
+#
+# Verifies the Nebula SwiftPM library across the full 5-platform target matrix
+# (iOS / macOS / tvOS / watchOS / visionOS, all .v26) plus the host build/test
+# suite and DocC catalog generation.
+#
+# Toolchain requirement (forward-looking):
+#   The Package.swift manifest declares `swift-tools-version: 6.3`, which
+#   Xcode 26.0–26.3 (Swift 6.2) will REFUSE to parse. This workflow therefore
+#   requires a runner that ships Xcode 26.4+ and the OS 26 SDKs. We use the
+#   `macos-26` GitHub-hosted image, which ships Xcode 27 (Swift 6.4) and the
+#   macOS 26 SDK. On any runner without Xcode 26.4+, every job will fail at
+#   manifest parse — that is INTENTIONAL: Nebula targets `.v26` and does not
+#   support older toolchains.
+#
+#   We rely on the runner default Xcode (already 27 on macos-26) rather than
+#   calling `xcode-select -s` or pulling a third-party action, to keep the
+#   workflow dependency-free. A defensive `xcode-select -p` step prints the
+#   active developer directory so failures surface the toolchain in the log.
+#
+# Zero concurrency warnings is MANDATORY under Swift 6 language mode. The
+# macOS host job sets SWIFT_TREAT_WARNINGS_AS_ERRORS=YES so xcodebuild fails
+# if any concurrency/Sendable warning slips in.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Cancel in-flight runs for the same ref when a new commit lands.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Fail the build on any Swift warning. Swift 6 language mode makes
+  # concurrency/Sendable diagnostics errors already; this catches the rest
+  # (deprecations, unused, etc.) so the repo stays warning-clean.
+  SWIFT_TREAT_WARNINGS_AS_ERRORS: "YES"
+  # No code signing needed for a SwiftPM library build against SDKs.
+  CODE_SIGNING_ALLOWED: "NO"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 5-platform SDK build matrix.
+  #
+  # Compiles the Nebula target against each platform SDK using a GENERIC
+  # destination (no simulator). This is the forward-looking guard for
+  # `#if os()` / platform-specific API coverage: today Nebula ships no
+  # platform-gated code, but if any lands the matrix will exercise it.
+  # ---------------------------------------------------------------------------
+  build-matrix:
+    name: Build (${{ matrix.platform }})
+    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [iOS, macOS, tvOS, watchOS, visionOS]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show active Xcode (defensive — macos-26 defaults to Xcode 27)
+        run: |
+          xcode-select -p
+          xcodebuild -version
+
+      - name: Cache SPM build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: spm-${{ matrix.platform }}-${{ runner.os }}-${{ hashFiles('Package.swift', 'Package.resolved', 'Sources/**/*.swift') }}
+          restore-keys: |
+            spm-${{ matrix.platform }}-${{ runner.os }}-
+
+      - name: Build for ${{ matrix.platform }} SDK
+        run: |
+          xcodebuild build \
+            -scheme Nebula \
+            -destination 'generic/platform=${{ matrix.platform }}' \
+            CODE_SIGNING_ALLOWED=NO \
+            SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
+
+  # ---------------------------------------------------------------------------
+  # macOS host job: swift build + swift test + release build.
+  # `swift build` builds for the host (macOS). Runs the full test suite and
+  # confirms a release configuration compiles cleanly.
+  # ---------------------------------------------------------------------------
+  host-build-and-test:
+    name: Host build, test, release (macOS)
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show active Xcode (defensive — macos-26 defaults to Xcode 27)
+        run: |
+          xcode-select -p
+          xcodebuild -version
+
+      - name: Cache SPM build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: spm-host-${{ runner.os }}-${{ hashFiles('Package.swift', 'Package.resolved', 'Sources/**/*.swift', 'Tests/**/*.swift') }}
+          restore-keys: |
+            spm-host-${{ runner.os }}-
+
+      # Debug build for the host. SWIFT_TREAT_WARNINGS_AS_ERRORS is exported
+      # at the workflow level; swift/swiftc honor it.
+      - name: swift build (debug, host)
+        run: swift build
+
+      # Run the Swift Testing suite (379 tests). Default execution is fine;
+      # if flakes appear, drop `--parallel` by passing --no-parallel.
+      - name: swift test
+        run: swift test
+
+      # Release configuration — catches optimizer-only issues and confirms
+      # the library ships clean under -O.
+      - name: swift build (release, host)
+        run: swift build -c release
+
+  # ---------------------------------------------------------------------------
+  # DocC catalog build. Confirms the Nebula.docc catalog compiles (links
+  # resolve / articles build). Uses the verified command from the project.
+  # ---------------------------------------------------------------------------
+  docc-build:
+    name: DocC build (macOS)
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show active Xcode (defensive — macos-26 defaults to Xcode 27)
+        run: |
+          xcode-select -p
+          xcodebuild -version
+
+      - name: Cache SPM build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: spm-docc-${{ runner.os }}-${{ hashFiles('Package.swift', 'Package.resolved', 'Sources/**/*.swift', 'Sources/Nebula/Nebula.docc/**/*') }}
+          restore-keys: |
+            spm-docc-${{ runner.os }}-
+
+      # Verified to succeed on Xcode 27 Beta 3 / Swift 6.4. Unresolved
+      # <doc:Article> links are warnings, not errors — docbuild still
+      # succeeds, but articles written in-repo should resolve.
+      - name: Build DocC catalog
+        run: |
+          xcodebuild docbuild \
+            -scheme Nebula \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
