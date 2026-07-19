@@ -211,7 +211,13 @@ struct NebulaStandardsTests {
 
     @Test func measurementProducesNonEmptyString() {
         let m = Measurement(value: 42.0, unit: UnitLength.kilometers)
-        let s = m.formatted(pinned.measurement(usage: .asProvided))
+        // `measurement<U: Dimension>` infers `U` only from the return-type context
+        // (no parameter pins it), so annotate the style explicitly — mirroring the
+        // `ListFormatStyle` test above. Relying on bidirectional inference from
+        // `m.formatted(...)` compiles on some type-checkers but resolves `U = Dimension`
+        // (the bound) on others, failing the build.
+        let style: Measurement<UnitLength>.FormatStyle = pinned.measurement(usage: .asProvided)
+        let s = m.formatted(style)
         #expect(!s.isEmpty)
         #expect(s.contains("42"))
     }

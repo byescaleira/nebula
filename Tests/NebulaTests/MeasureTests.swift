@@ -59,14 +59,14 @@ struct NebulaMeasureResultTests {
 @Suite("NebulaMeasureConfiguration.measure")
 struct NebulaMeasureConfigurationMeasureTests {
     @Test func measureSyncReturnsValueAndDuration() {
-        let (v, d) = try NebulaMeasureConfiguration.default.measure("compute") { 42 }
+        let (v, d) = NebulaMeasureConfiguration.default.measure("compute") { 42 }
         #expect(v == 42)
         #expect(d >= .zero)
     }
 
     @Test func measureAsyncReturnsValueAndDuration() async {
         let cfg = NebulaMeasureConfiguration.default
-        let (v, d) = try await cfg.measure("compute") { await Task { 7 }.value }
+        let (v, d) = await cfg.measure("compute") { await Task { 7 }.value }
         #expect(v == 7)
         #expect(d >= .zero)
     }
@@ -78,10 +78,14 @@ struct NebulaMeasureConfigurationMeasureTests {
         }
     }
 
-    @Test func measureAsyncRethrows() async throws {
+    @Test func measureAsyncRethrows() async {
         let cfg = NebulaMeasureConfiguration.default
+        // Force the ASYNC `measure` overload with an explicitly
+        // `() async throws -> Void` closure so `try await` is genuinely
+        // required (a plain `{ throw Boom() }` resolves to the sync overload
+        // and makes `await` an unnecessary-effect-marker warning).
         await #expect(throws: Boom.self) {
-            try await cfg.measure("x") { throw Boom() }
+            try await cfg.measure("x") { () async throws -> Void in throw Boom() }
         }
     }
 
@@ -89,7 +93,7 @@ struct NebulaMeasureConfigurationMeasureTests {
         let cfg = NebulaMeasureConfiguration(
             signposter: NebulaSignposter(subsystem: "test.nebula.measure")
         )
-        let (v, d) = try cfg.measure("compute") { 99 }
+        let (v, d) = cfg.measure("compute") { 99 }
         #expect(v == 99)
         #expect(d >= .zero)
     }
@@ -98,7 +102,7 @@ struct NebulaMeasureConfigurationMeasureTests {
         let cfg = NebulaMeasureConfiguration(
             signposter: NebulaSignposter(subsystem: "test.nebula.measure")
         )
-        let (v, d) = try await cfg.measure("compute") { await Task { 5 }.value }
+        let (v, d) = await cfg.measure("compute") { await Task { 5 }.value }
         #expect(v == 5)
         #expect(d >= .zero)
     }
@@ -107,14 +111,14 @@ struct NebulaMeasureConfigurationMeasureTests {
         // `isEnabled` gates the handler fan-out and signpost emission, NOT the
         // timing — the returned Duration must still be meaningful.
         let cfg = NebulaMeasureConfiguration.default.withEnabled(false)
-        let (v, d) = try cfg.measure("compute") { 17 }
+        let (v, d) = cfg.measure("compute") { 17 }
         #expect(v == 17)
         #expect(d >= .zero)
     }
 
     @Test func measureWithSuspendingClockDoesNotCrash() {
         let cfg = NebulaMeasureConfiguration(clock: SuspendingClock())
-        let (v, d) = try cfg.measure("compute") { 3 }
+        let (v, d) = cfg.measure("compute") { 3 }
         #expect(v == 3)
         #expect(d >= .zero)
     }
@@ -124,7 +128,7 @@ struct NebulaMeasureConfigurationMeasureTests {
 struct NebulaMeasureConfigurationBenchTests {
     @Test func benchReturnsResultWithExpectedFields() {
         let cfg = NebulaMeasureConfiguration.default
-        let r = try cfg.bench("loop", iterations: 100) { _ = 1 + 1 }
+        let r = cfg.bench("loop", iterations: 100) { _ = 1 + 1 }
         #expect(r.name == "loop")
         #expect(r.iterations == 100)
         #expect(r.total >= .zero)
@@ -133,14 +137,14 @@ struct NebulaMeasureConfigurationBenchTests {
 
     @Test func benchDefaultIterations() {
         let cfg = NebulaMeasureConfiguration.default
-        let r = try cfg.bench("loop") { _ = 1 + 1 }
+        let r = cfg.bench("loop") { _ = 1 + 1 }
         #expect(r.iterations == 10)
     }
 
     @Test func benchHandlerInvokedWhenEnabled() {
         let captured = Mutex<[NebulaMeasureResult]>([])
         let cfg = NebulaMeasureConfiguration(handler: { result in captured.withLock { $0.append(result) } })
-        _ = try cfg.bench("loop", iterations: 5) { _ = 1 + 1 }
+        _ = cfg.bench("loop", iterations: 5) { _ = 1 + 1 }
         let results = captured.withLock { $0 }
         #expect(results.count == 1)
         #expect(results.first?.iterations == 5)
@@ -152,7 +156,7 @@ struct NebulaMeasureConfigurationBenchTests {
             isEnabled: false,
             handler: { result in captured.withLock { $0.append(result) } }
         )
-        _ = try cfg.bench("loop", iterations: 5) { _ = 1 + 1 }
+        _ = cfg.bench("loop", iterations: 5) { _ = 1 + 1 }
         let results = captured.withLock { $0 }
         #expect(results.isEmpty)
     }
@@ -163,7 +167,7 @@ struct NebulaMeasureConfigurationBenchTests {
         // skipped) while remaining untimed.
         let counter = Mutex(0)
         let cfg = NebulaMeasureConfiguration.default
-        _ = try cfg.bench("loop", iterations: 10, warmup: 3) {
+        _ = cfg.bench("loop", iterations: 10, warmup: 3) {
             counter.withLock { $0 += 1 }
         }
         #expect(counter.withLock { $0 } == 13)
@@ -180,7 +184,7 @@ struct NebulaMeasureConfigurationBenchTests {
         let cfg = NebulaMeasureConfiguration(
             signposter: NebulaSignposter(subsystem: "test.nebula.measure")
         )
-        let r = try cfg.bench("loop", iterations: 5) { _ = 1 + 1 }
+        let r = cfg.bench("loop", iterations: 5) { _ = 1 + 1 }
         #expect(r.iterations == 5)
         #expect(r.total >= .zero)
     }
@@ -227,7 +231,7 @@ struct NebulaMeasureConfigurationBuilderTests {
         let cfg = NebulaMeasureConfiguration.default.withHandler { _ in
             captured.withLock { $0 += 1 }
         }
-        _ = try cfg.bench("loop") { _ = 1 + 1 }
+        _ = cfg.bench("loop") { _ = 1 + 1 }
         #expect(captured.withLock { $0 } == 1)
     }
 }
@@ -254,7 +258,7 @@ struct NebulaMeasureConfigTests {
         let retrieved = NebulaMeasureConfig.get()
         #expect(retrieved.isEnabled == true)
         // Confirm the handler is wired by exercising the current config.
-        _ = try NebulaMeasureConfig.get().bench("loop", iterations: 2) { _ = 1 + 1 }
+        _ = NebulaMeasureConfig.get().bench("loop", iterations: 2) { _ = 1 + 1 }
         #expect(captured.withLock { $0 }.count == 1)
     }
 }
