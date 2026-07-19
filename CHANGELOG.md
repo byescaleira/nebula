@@ -9,6 +9,80 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.2.0] - 2026-07-19
+
+The **Clean Architecture toolkit** — the second surface of Nebula (foundation + architecture). A new
+`Sources/Nebula/Architecture/` subtree ships the **seams** that help — and let — an app implement
+Clean Architecture efficiently, without Nebula owning any presentation, database, or framework code.
+Concrete adapters (repositories, gateways, presenters, URLSession networking) live in the app; Cosmos
+is the presentation layer. Presentation patterns (MVVM / MVC / VIP / VIPER) are explicitly out of scope.
+The toolkit is pure Swift + Foundation + `Synchronization`; every symbol sits at the Nebula 26 floor
+(no above-floor gates). 509 tests / 107 suites green; zero concurrency warnings under Swift 6 mode.
+Wave H complete — see `ROADMAP.md`. ADR in `DECISIONS.md`.
+
+### Added
+- **Architecture/Domain** — `NebulaValue` / `NebulaEntity` / `NebulaAggregate` markers + `NebulaID<Entity>`
+  phantom-typed UUID identity (1-param — generic-parameter defaults are rejected on this toolchain,
+  verified `swiftc -parse`; `Codable` intentionally not conformed on the type).
+- **Architecture/Ports** — bare `Sendable` markers `NebulaInputPort` / `NebulaOutputPort` / `NebulaDTO`.
+  Nebula defines no presenter.
+- **Architecture/Errors** — `NebulaFailure: Error, Sendable` protocol + per-layer open structs
+  `NebulaDomainError` / `NebulaValidationError` (`Sendable`/`Equatable`/`Hashable` derived) bridging to
+  the CLOSED `NebulaError.Kind` enum via a caller-picked `toNebulaError(kind:)` — NO new `Kind` cases.
+  `NebulaError.init(error:)` dispatches `NebulaFailure` before the `NSError` fallback.
+- **Architecture/UseCase** — `NebulaUseCase<I, O>` generic `Sendable` struct over a `@Sendable`
+  `(I) async throws -> O` body (NOT a protocol + `AnyUseCase` box) + `NebulaUseCaseRole` closed
+  command/query enum + `NebulaUseCaseBody` typealias; `execute(_:)` (untyped `throws`) and
+  `executeTyped(_:) async throws(NebulaError)` (SE-0413, preserves a thrown `NebulaError`, bridges
+  others via `NebulaError(error:)`). Decorators `.logged(using:)` / `.measured(using:)` /
+  `.reported(using:)` / `.instrumented(using:measure:error:)` route to the EXISTING log/measure/error
+  configs (NO 5th config); `.instrumented` composes `reported().measured().logged()`.
+- **Architecture/Repository** — PAT `NebulaRepository<Element>: Sendable` + capability sub-protocols
+  `NebulaReadOnlyRepository` (`stream()`/`count()`) / `NebulaKeyedRepository` (`find(id:)` requirement,
+  `Element: NebulaEntity`) / `NebulaWritableRepository` (`save(_:)`, no `update` verb) /
+  `NebulaDeletableRepository` (`delete(_:)`). `stream()` returns concrete `AsyncThrowingStream` (a
+  `some AsyncSequence` return is illegal in a protocol requirement). `NebulaRepositoryError`
+  (`Source` enum `.local`/`.remote`/`.unknown`; open `Kind` with presets `.notFound`/`.alreadyExists`/
+  `.storeFailure`/`.mapping`/`.constraintViolation`/`.cancelled`/`.unknown`; factory statics) conforming
+  to `NebulaFailure`.
+- **Architecture/Gateway** — `NebulaGateway` marker + `NebulaGatewayConfiguration` (Sendable ONLY — NOT
+  `Equatable`, mirrors `NebulaErrorConfiguration`; reuses `NebulaJSONDecoder`/`NebulaJSONEncoder`;
+  `.with*` builders + `report(_:)`) + `NebulaGatewayConfig` process-wide `Mutex` accessor.
+- **Architecture/Validation** — `NebulaValidator<T>` (sync, `Rule` closures, `validate(_:)`
+  short-circuits on the first failing rule, `+` composes) + `NebulaAsyncValidator<T>` (async,
+  `AsyncRule` closures may `await`/`throw`; a thrown I/O error propagates out — it is NOT a `.failure`).
+- **Architecture/Registry** — `NebulaRegistryKey` (open `Sendable` `ExpressibleByStringLiteral` struct,
+  mirrors `NebulaLogCategory`; presets `.repository`/`.gateway`/`.useCase`) +
+  `NebulaRegistryConfiguration` (Sendable ONLY, transient `@Sendable () -> Any` factories,
+  `.withFactory(for:_:)`) + `NebulaRegistry` (explicit constructor-injection `resolve(_:as:)`) +
+  `NebulaRegistryConfig` (process-wide `Mutex` accessor). DI **without** a container.
+- **Architecture/Testing** — in-target test doubles `NebulaFakeRepository` (keyed/writable/deletable
+  in-memory; `final class` + `let Mutex`, `Sendable` **derived** — final class with all-`let`
+  `Sendable` properties, no `@unchecked`) /
+  `NebulaStubUseCase` (canned `Result<O, NebulaError>`, `execute` + `executeTyped`) /
+  `NebulaSpyUseCase` (records inputs, `callCount`/`inputs()`, delegates to `body`). Ship in the main
+  target (decision #8).
+- **Architecture/Async** — `NebulaResultPipeline<T: Sendable>` (`map`/`flatMap`/`recover` `@Sendable`
+  async transforms over `Result<T, NebulaError>`; `map` bridges thrown errors via `NebulaError(error:)`;
+  `.failure` short-circuits) + `AsyncSequence.nebulaChunked(byCount:)` / `nebulaUniqued(on:)` /
+  `nebulaUniqued()` (constrained `Self: Sendable, Element: Sendable`, return concrete
+  `AsyncThrowingStream`; `nebula*` prefix — no stdlib pollution).
+- **DocC** — `Architecture.md` canonical article + 10 per-subsystem articles
+  (`ArchitectureDomain`/`Ports`/`Errors`/`UseCase`/`Repository`/`Gateway`/`Validation`/`Registry`/
+  `Testing`/`Async`); linked from the module root `Nebula.md`.
+- **Governance docs** — `ARCHITECTURE.md` (Architecture section), `DECISIONS.md` (Wave H ADR,
+  Accepted), `ROADMAP.md` (Wave H shipped), `VERSIONING.md` (toolkit at-floor row). Vault: 11
+  architecture notes marked shipped.
+
+### Deferred (not in 0.2.0; tracked in `ROADMAP.md` → "Later")
+- `NebulaInvariant` (decision #6 — validator ergonomics).
+- `NebulaMockRepository` (decision #8 — ship Fake/Stub/Spy only in v1).
+- `NebulaHTTPGateway` (decision #8-resolved — ship the seam only; the app provides URLSession).
+- `NebulaCancellation` / `NebulaError.wrapAsync` (decision #13 — reuse `Task.checkCancellation()` and
+  inline do/catch).
+- Template multi-module `Domain` product (decision #10 — single-target; document the recommended
+  app `Domain` module).
+
 ## [0.1.0] - 2026-07-18
 
 First tagged release. The first **complete** Nebula foundation: the four `Sendable` configuration

@@ -22,3 +22,4 @@ Four `Sendable` value-type configuration structs flow through explicit injection
 - <doc:Extensions>
 - <doc:Standardize>
 - <doc:Measure>
+- <doc:Architecture>

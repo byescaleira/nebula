@@ -36,6 +36,7 @@ Feature → OS gate reference (foundation-specific, verified against the Xcode 2
 | **At-floor — Nebula 26 == OS 26**, gate `@available(iOS 26, macOS 26, tvOS 26, watchOS 26, visionOS 26, *)` | |
 | `DateComponents.formatted(_:)` / `DateComponents.init(_:strategy:)` / `DateComponents.ISO8601FormatStyle` + `.iso8601` static | iOS 26 / macOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (at-floor — gate) |
 | `CryptoKit.SHA2_256` typealias | iOS 26 / macOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (at-floor — gate; `NebulaHashAlgorithm.sha2_256` alias) |
+| Clean Architecture toolkit (`Sources/Nebula/Architecture/` — Domain/Ports/Errors/UseCase/Repository/Gateway/Validation/Registry/Testing/Async) | iOS 26 / macOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (at-floor — "since Nebula 26"; the toolkit is pure Swift + Foundation + `Synchronization` and uses only below-floor primitives, so its types carry NO `@available` gate — the `.v26` deployment target makes them available on all 5 platforms. No above-floor gates.) |
 | **Above-floor — Nebula 26.4**, gate `@available(iOS 26.4, macOS 26.4, tvOS 26.4, watchOS 26.4, visionOS 26.4, *)` | |
 | `Data.Base64EncodingOptions.base64URLAlphabet` / `.omitPaddingCharacter` | iOS 26.4 / macOS 26.4 / tvOS 26.4 / watchOS 26.4 / visionOS 26.4 (above-floor — "since Nebula 26.4"; defer non-essential to Nebula 26.4) |
 | `String.Encoding.ianaName` getter AND `init?(ianaName:)` | iOS 26.4 / macOS 26.4 / tvOS 26.4 / watchOS 26.4 / visionOS 26.4 (above-floor — "since Nebula 26.4") |

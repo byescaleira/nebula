@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-07-18 (Wave G — DocC + CI + polish. Waves A–F shipped; 379 tests green.)
+> Last updated: 2026-07-19 (Wave H — Clean Architecture toolkit shipped. Waves A–H shipped; 509 tests green.)
 >
 > This roadmap reflects the project state **after the foundation research cycle** that produced
 > the 12 verified research dimensions. The vault notes (`01-fundamentos/` + `03-padroes/`) are the
@@ -48,6 +48,28 @@
 - [x] README examples (logger + error + format) — corrected to the shipped API (`NebulaErrorConfig.report(error)`, redaction-preserving `logger.osLogger.info(...)` vs simple `logger.info(...)`)
 - [x] Per-platform `#if os()` coverage pass — no `#if os(...)` in `Sources/` today (no platform-specific API shipped yet); the CI matrix is the forward-looking guard for when the deferred macOS-only `NebulaLogStoreExporter` lands
 - [ ] Tag `0.1.0` — ready to tag (user action)
+
+## Done (0.2.0 — Clean Architecture toolkit)
+
+### Wave H — Clean Architecture toolkit — DONE
+- [x] Shipped `Sources/Nebula/Architecture/` — the **second surface** of Nebula (foundation + architecture). Seams only — no presentation, DB, or framework code. Presentation patterns (MVVM/MVC/VIP/VIPER) explicitly out of scope; Cosmos is the presentation layer. Pure Swift + Foundation + `Synchronization`; every symbol at the Nebula 26 floor (no above-floor gates).
+- [x] `Domain/` — `NebulaValue`/`NebulaEntity`/`NebulaAggregate` markers + `NebulaID<Entity>` phantom-typed UUID identity. 1-param (generic-parameter defaults rejected on this toolchain — verified `swiftc -parse`).
+- [x] `Ports/` — bare `Sendable` markers `NebulaInputPort`/`NebulaOutputPort`/`NebulaDTO`.
+- [x] `Errors/` — `NebulaFailure` protocol + per-layer open structs `NebulaDomainError`/`NebulaValidationError` (Equatable/Hashable derived) bridging to the closed `NebulaError.Kind` via caller-picked `toNebulaError(kind:)`. `NebulaError+Mapping.swift` dispatches `NebulaFailure` before the `NSError` fallback. No new `Kind` cases.
+- [x] `UseCase/` — `NebulaUseCase<I, O>` generic `Sendable` struct + `NebulaUseCaseRole` (command/query) + `execute(_:)` (untyped `throws`) / `executeTyped(_:) async throws(NebulaError)` (SE-0413); `.logged`/`.measured`/`.reported`/`.instrumented` decorators route to the existing log/measure/error configs (no 5th config).
+- [x] `Repository/` — PAT `NebulaRepository<Element>` + capability sub-protocols (read-only / keyed / writable / deletable); `stream()` returns concrete `AsyncThrowingStream` (`some AsyncSequence` illegal in a protocol requirement); `NebulaRepositoryError` (`Source` enum + open `Kind` + factory statics). No CRUD mandate, no `update` verb.
+- [x] `Gateway/` — `NebulaGateway` marker + `NebulaGatewayConfiguration` (reuses `NebulaJSONDecoder`/`Encoder`) + `NebulaGatewayConfig` Mutex accessor. Concrete `NebulaHTTPGateway` deferred.
+- [x] `Validation/` — `NebulaValidator<T>` (sync, short-circuit, `+`) + `NebulaAsyncValidator<T>` (async; a thrown I/O error propagates, NOT a `.failure`).
+- [x] `Registry/` — `NebulaRegistryKey` (open struct) + `NebulaRegistryConfiguration` + `NebulaRegistry` (explicit injection) + `NebulaRegistryConfig` (process-wide Mutex). DI **without** a container.
+- [x] `Testing/` — in-target test doubles `NebulaFakeRepository` / `NebulaStubUseCase` / `NebulaSpyUseCase` (`final class` + `let Mutex`; `Sendable` **derived** — final class with all-`let` `Sendable` properties, no `@unchecked`; the spy is explicitly `: Sendable` so it can be shared across tasks). Swift Testing `confirmation(expectedCount:)` for the spy.
+- [x] `Async/` — `NebulaResultPipeline<T>` (`map`/`flatMap`/`recover` over `Result<T, NebulaError>`) + `AsyncSequence.nebulaChunked(byCount:)`/`nebulaUniqued(on:)`/`nebulaUniqued()`.
+- [x] Tests — `ArchitectureDomainTests`/`PortsTests`/`ErrorsTests`/`UseCaseTests`/`RepositoryTests`/`GatewayTests`/`ValidationTests`/`RegistryTests`/`TestDoublesTests`/`AsyncFlowTests`. 509 tests / 107 suites green; zero concurrency warnings under Swift 6 mode (`rm -rf .build && swift build && swift test && swift build -c release`).
+- [x] DocC — `Architecture.md` canonical article + 10 per-subsystem articles; linked from the module root.
+- [x] Root docs — `ARCHITECTURE.md` (Architecture section), `DECISIONS.md` (Wave H ADR), `CHANGELOG.md` (0.2.0), `VERSIONING.md` (toolkit at-floor), this roadmap. Vault: 11 architecture notes marked shipped.
+- [ ] Tag `0.2.0` — ready to tag (user action)
+
+### Deferred (tracked below in "Later")
+- `NebulaInvariant` (decision #6), `NebulaMockRepository` (#8), `NebulaHTTPGateway` (#8-resolved), `NebulaCancellation`/`NebulaError.wrapAsync` (#13), template multi-module product (#10).
 
 ## Later (post-0.1.0)
 

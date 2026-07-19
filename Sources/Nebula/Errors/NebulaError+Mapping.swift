@@ -143,6 +143,12 @@ extension NebulaError {
             self.init(urlError: e)
         } else if let e = error as? CocoaError {
             self.init(cocoaError: e)
+        } else if let failure = error as? NebulaFailure {
+            // Clean Architecture layer errors (NebulaDomainError /
+            // NebulaValidationError / NebulaRepositoryError) bridge to the
+            // closed Kind via the failure's caller-picked mapping, defaulting
+            // to its coarseKind. No new NebulaError.Kind cases are introduced.
+            self = failure.toNebulaError(kind: failure.coarseKind)
         } else {
             self.init(error as NSError)
         }

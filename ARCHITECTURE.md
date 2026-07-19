@@ -49,7 +49,8 @@ Nebula/
 │   ├── Errors/              # NebulaError envelope + Box + configuration + lossy mapping
 │   ├── Extensions/          # DateTime/ String/ Number/ Primitive/ Collection/ Codable/ DataURL
 │   ├── Standardize/         # NebulaStandards + NebulaStandardsConfig (FormatStyle façades)
-│   └── Measure/             # NebulaMeasureConfiguration + NebulaMeasureResult + NebulaMeasureConfig
+│   ├── Measure/             # NebulaMeasureConfiguration + NebulaMeasureResult + NebulaMeasureConfig
+│   └── Architecture/        # Clean Architecture toolkit — seams only (domain/ports/use case/repository/gateway/validation/registry/testing/async)
 └── Tests/
     └── NebulaTests/          # Swift Testing — mirrors source layout
 ```
@@ -157,6 +158,25 @@ Gate `DateComponents.formatted(_:)` + `DateComponents.ISO8601FormatStyle` + `.is
 `ContinuousClock` counts sleep; `SuspendingClock` does not (WWDC22 110355) — document the choice so users pick the right clock. `bench()` is a quick micro-bench, not statistically rigorous (no p50/p99 yet).
 
 **Deferred**: `NebulaClock` (ContinuousClock/SuspendingClock wrapper) — `NebulaMeasureConfiguration` uses `any Clock<Duration>` directly. Tracked in `ROADMAP.md` → "Later".
+
+## Architecture
+
+`Sources/Nebula/Architecture/` is the **second surface** of Nebula: the Clean Architecture toolkit. It ships **only the seams** — inner-owned marker protocols, a DTO contract, repository/gateway ports, a use-case type, validators, a registry, test doubles, and async-flow helpers — so an app can implement Clean Architecture efficiently without Nebula owning any presentation, database, or framework code. Concrete adapters (repositories, gateways, presenters, URLSession networking) live in the app; Cosmos, the SwiftUI sibling, is the presentation layer. Presentation patterns (MVVM / MVC / VIP / VIPER) are explicitly out of scope. The toolkit is pure Swift + Foundation + `Synchronization`; every symbol sits at the Nebula 26 floor (no above-floor gates). The DocC catalog (`Sources/Nebula/Nebula.docc/Architecture.md`) is the canonical article.
+
+| Subtree | Responsibility |
+|---|---|
+| `Domain/` | Markers `NebulaValue`/`NebulaEntity`/`NebulaAggregate` + the phantom-typed `NebulaID` identity value. |
+| `Ports/` | Bare `Sendable` markers `NebulaInputPort`/`NebulaOutputPort`/`NebulaDTO`. Nebula defines no presenter. |
+| `Errors/` | `NebulaFailure` protocol + per-layer open structs (`NebulaDomainError`, `NebulaValidationError`) bridging to the closed `NebulaError.Kind` via a caller-picked `toNebulaError(kind:)`. No new `Kind` cases. |
+| `UseCase/` | `NebulaUseCase<I, O>` generic `Sendable` struct over a `@Sendable` async body + `NebulaUseCaseRole` (command/query); `.logged`/`.measured`/`.reported`/`.instrumented` decorators route to the existing configs (no 5th config); `executeTyped(_:) async throws(NebulaError)`. |
+| `Repository/` | Capability protocols (`NebulaRepository` / read-only / keyed / writable / deletable) + `NebulaRepositoryError`. No CRUD mandate, no `update` verb. |
+| `Gateway/` | `NebulaGateway` marker + `NebulaGatewayConfiguration` (reuses `NebulaJSONDecoder`/`Encoder`) + `NebulaGatewayConfig` accessor. Concrete HTTP gateway deferred. |
+| `Validation/` | `NebulaValidator<T>` (sync, short-circuit) + `NebulaAsyncValidator<T>` (async; a thrown I/O error is distinct from a validation failure). |
+| `Registry/` | `NebulaRegistryKey` (open struct) + `NebulaRegistryConfiguration` + `NebulaRegistry` (explicit injection) + `NebulaRegistryConfig` (process-wide). DI **without** a container. |
+| `Testing/` | In-target test doubles `NebulaFakeRepository`/`NebulaStubUseCase`/`NebulaSpyUseCase` (`final class` + `let Mutex`; `Sendable` **derived** — final class with all-`let` `Sendable` properties, no `@unchecked`). |
+| `Async/` | `NebulaResultPipeline<T>` (`map`/`flatMap`/`recover` over `Result<T, NebulaError>`) + `AsyncSequence.nebulaChunked(byCount:)`/`nebulaUniqued(on:)`. |
+
+All public value types derive `Sendable`. The toolkit introduces **no** `@unchecked Sendable`: the two `final class` test-helpers (`NebulaFakeRepository`, `NebulaSpyUseCase`) derive `Sendable` (a `final class` with all-`let` `Sendable` properties synthesizes `Sendable`; `Mutex` is `Sendable` when its value is), needing no `@unchecked`. They are `final class` rather than `struct` because a `Mutex`-typed stored property propagates `~Copyable` to an owning *struct* — a non-copyable double is awkward to pass around a test; the class absorbs the `~Copyable` `Mutex` behind a copyable reference (the `NebulaError.Box` derived-Sendable-`final class` precedent, not the `NebulaMemoryLogHandler` `@unchecked` exception). The 10 locked design decisions and the consolidated risks live in the vault (`03-padroes/nebula-clean-architecture-toolkit.md`, `08-riscos/clean-architecture-toolkit-risks.md`, `08-riscos/clean-architecture-open-questions.md`); the ADR is in `DECISIONS.md`.
 
 ## Concurrency
 
