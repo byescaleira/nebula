@@ -20,6 +20,14 @@ Meridian (`Meridian/`, the presentation-architecture sibling that ships SwiftUI 
 - The same `swift-tools-version: 6.3` / `swiftLanguageModes: [.v6]` / all-5-platforms-`.v26` / `defaultLocalization: "en"` constraints apply. Meridian may freely `import SwiftUI` (that is its purpose); Nebula may NEVER `import Meridian` (hard compile error across packages — the Clean Architecture enforcement).
 - "Available since Meridian 26" is not a separate `@available` stream — Meridian has no OS-introduced symbols of its own (it only re-exports Nebula's model and binds it to SwiftUI, both already at the `.v26` floor). Meridian minor/patch follow Nebula minor/patch within the Nebula 26 major; a Nebula major bump drags Meridian along.
 
+## Aurora — sibling package, aligned to Nebula
+
+Aurora (`Aurora/`, the persistence-architecture sibling that ships a `@ModelActor`-backed SwiftData repository adapter on top of Nebula's Foundation-only `NebulaRepository` ports) is a **separate local SwiftPM package** with its own `Package.swift`, versioned **in lockstep with Nebula**: `Aurora N` ↔ `Nebula N` ↔ `OS N`. Aurora's major always equals Nebula's major at the same OS baseline (current: **Aurora 26 / Nebula 26 / OS 26**). This mirrors the Meridian policy exactly.
+
+- Aurora depends on Nebula via `.package(name: "Nebula", path: "../")`; it is a subdir package in this repo (one repo, one CI), NOT a separate git remote. Promoting Aurora to its own public git repo + tag stream is a documented future step — until then it ships untagged alongside Nebula and is consumed by path.
+- The same `swift-tools-version: 6.3` / `swiftLanguageModes: [.v6]` / all-5-platforms-`.v26` / `defaultLocalization: "en"` constraints apply. Aurora may freely `import SwiftData` (that is its purpose); Nebula may NEVER `import Aurora` (hard compile error across packages — the Clean Architecture enforcement: domain and use cases never import persistence).
+- "Available since Aurora 26" is not a separate `@available` stream — Aurora has no OS-introduced symbols of its own (it bridges SwiftData, below the `.v26` floor, to Nebula's already-`.v26` ports). Aurora minor/patch follow Nebula minor/patch within the Nebula 26 major; a Nebula major bump drags Aurora along.
+
 ## API availability == Nebula API versioning
 
 Because the SwiftPM deployment target tracks the OS, `@available(iOS 26, *)` is the canonical way to express "available since Nebula 26". `@available` gates MUST include all 5 platforms: `@available(iOS 26, macOS 26, tvOS 26, watchOS 26, visionOS 26, *)`. Use `@available(*, deprecated, message:)` with a migration runway before `obsoleted:`. Centralize `if #available` gates for OS-introduced features rather than scattering them through the codebase.

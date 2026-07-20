@@ -14,7 +14,7 @@ The toolkit is pure Swift + Foundation + `Synchronization` — every symbol sits
 |---|---|
 | **Entities** (enterprise business rules) | ``NebulaValue``, ``NebulaEntity``, ``NebulaAggregate``, ``NebulaID`` |
 | **Use Cases** (application business rules) | ``NebulaUseCase`` + ``NebulaUseCaseRole``; decorators `.logged`/`.measured`/`.reported`/`.instrumented` |
-| **Interface Adapters** (ports, repositories, gateways, DTOs) | ``NebulaInputPort``, ``NebulaOutputPort``, ``NebulaDTO``, ``NebulaRepository`` capability protocols, ``NebulaGateway``, ``NebulaValidator``/``NebulaAsyncValidator``, ``NebulaRegistry`` |
+| **Interface Adapters** (ports, repositories, gateways, DTOs) | ``NebulaInputPort``, ``NebulaOutputPort``, ``NebulaDTO``, ``NebulaRepository`` capability protocols, ``NebulaGateway``, ``NebulaPreferences``, ``NebulaValidator``/``NebulaAsyncValidator``, ``NebulaRegistry`` |
 | **Frameworks & Drivers** | Outside Nebula — the app provides concrete adapters (URLSession, persistence, presenters). |
 
 ### Dependency rule
@@ -42,6 +42,10 @@ Nebula ships ``NebulaFakeRepository``, ``NebulaStubUseCase``, and ``NebulaSpyUse
 - <doc:ArchitectureUseCase>
 - <doc:ArchitectureRepository>
 - <doc:ArchitectureGateway>
+- <doc:ArchitectureNetwork>
+- <doc:ArchitectureHTTPCache>
+- <doc:ArchitectureHTTPServer>
+- <doc:ArchitecturePreferences>
 - <doc:ArchitectureValidation>
 - <doc:ArchitectureRegistry>
 - <doc:ArchitectureTesting>

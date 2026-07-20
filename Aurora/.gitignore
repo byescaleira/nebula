@@ -1,8 +1,5 @@
 .DS_Store
 
-# Local research scratch binaries (e.g. swiftc import probes)
-/probe_import
-
 # Swift / Xcode
 /.build
 /Packages
@@ -20,15 +17,12 @@ DerivedData.noindex/
 !default.mode1v3
 *.mode2v3
 !default.mode2v3
-*.perspectivev3
+*.perspective3v3
 !default.perspectivev3
 *.hmap
 *.ipa
 *.dSYM.zip
 *.dSYM
-*.playground
-playground.xcworkspace
-timeline.xctimeline
 
 # IDEs and local tooling
 .derived-data/
@@ -38,10 +32,6 @@ timeline.xctimeline
 *.swo
 *~
 *.orig
-
-# Claude / local agent state
-.claude/
-.claude-plugin/
 
 # Dependency lock (regenerate on CI)
 Package.resolved

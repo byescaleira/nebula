@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated: 2026-07-19 (Waves I–III — presentation architecture + Meridian shipped. Waves A–H + I–III shipped; 525 Nebula tests / 13 Meridian tests green.)
+> Last updated: 2026-07-19 (Waves N5–N8 — proper network layer shipped. Waves A–H + I–III + N1–N8 shipped; 635 Nebula tests / 127 suites + 12 Aurora tests / 3 suites green.)
 >
 > This roadmap reflects the project state **after the foundation research cycle** that produced
 > the 12 verified research dimensions. The vault notes (`01-fundamentos/` + `03-padroes/`) are the
@@ -94,8 +94,73 @@
 ### Wave IV — ADR + versioning + final gate — DONE
 - [x] `DECISIONS.md` — presentation-architecture ADR (option d, async port, sibling package). `VERSIONING.md` — Meridian N ↔ Nebula N ↔ OS N lockstep policy. `ARCHITECTURE.md` — Presentation (Meridian) section + subtree row. This roadmap.
 - [x] Vault — `presentation-architecture-open-questions.md` Q4 marked decided (d); `vault/Home.md` index updated.
-- [ ] Tag `0.3.0` — ready to tag (user action)
+- [x] Tag `0.3.0` — tagged + pushed (user action, completed)
 - [ ] Promote Meridian to its own public git repo + tag stream (documented future step; until then Meridian ships untagged, consumed by path)
+
+## Done (0.4.0 — Data + Network + Aurora)
+
+### Wave N1 — Network (NebulaHTTPGateway + NebulaRetry) — DONE
+- [x] `Architecture/Async/NebulaRetry.swift` — `NebulaRetryPolicy` (Sendable value, NOT `Equatable` — stores a `@Sendable (any Error) -> Bool` `isRetriable` predicate; `maxAttempts`/`baseDelay`/`multiplier`/`maxDelay`/`jitter` + `.with*` builders; `delay(forFailedAttempt:)` exponential + full/equal jitter; `defaultIsRetriable` retries transient `URLError` + HTTP 408/429/500/502/503/504) + `NebulaRetry.withPolicy(_:sleeper:operation:)` (cancellation-aware — `Task.checkCancellation()`; a `CancellationError` is never retried; injectable sleeper) + `NebulaRetryJitter`.
+- [x] `Architecture/Gateway/NebulaHTTPGateway.swift` — concrete `NebulaGateway` over `URLSession`: `get`/`post`/`put`/`delete` (decode `T` or raw `Data`); reuses `NebulaGatewayConfiguration`'s `NebulaJSONDecoder`/`Encoder`; retries via `NebulaRetry`; bridges `URLError` + HTTP status → `NebulaError` (kind `.network`, built explicitly via `NebulaError(code:kind:)` — NO new `Kind` case) + `NebulaHTTPStatusError`.
+- [x] Tests — `ArchitectureRetryTests` (16) + `ArchitectureHTTPGatewayTests` (13, `URLProtocol`-backed `URLSession`, `@Suite(.serialized)`). 557 Nebula tests / 113 suites green; zero warnings; release clean. Vault `03-padroes/nebula-network-retry.md`; DocC `ArchitectureAsync.md`/`ArchitectureGateway.md`.
+
+### Wave N2 — Preferences (NebulaPreferences + NebulaDefaults) — DONE
+- [x] `Architecture/Preferences/NebulaPreferences.swift` — `Sendable` key-value port: 3 byte-level requirements (`data`/`setData`/`remove`) + a **default extension** (`value`/`setValue` Codable bridge + `rawValue`/`setRawValue` RawRepresentable bridge, `RawValue: Codable`) every conformer inherits. Plain `JSONEncoder`/`JSONDecoder` (per-call, decoupled from the gateway config).
+- [x] `Architecture/Preferences/NebulaDefaults.swift` — `final class` `Mutex<UserDefaults>` façade; `UserDefaults` is `@_nonSendable(_assumed)` (verified) so the `Mutex` gives region-based isolation; `init(_ defaults: sending UserDefaults = .standard)` (SE-0430 — ownership transfers at the call site); `Sendable` derived, no `@unchecked`.
+- [x] Tests — `ArchitecturePreferencesTests` (17) — byte-level, Codable (round-trip/absent/corrupt→`DecodingError`), RawRepresentable (String/Int/unmappable→nil), an `InMemoryPrefs` `final class` proving the default extension works on a non-`UserDefaults` conformer, existential holding both impls, Sendable-across-`Task` + 50-task concurrent access. 574 Nebula tests / 118 suites green; zero warnings; release clean. Vault `03-padroes/nebula-preferences.md`; DocC `ArchitecturePreferences.md`.
+
+### Wave N3 — Persistence (Aurora sibling package — SwiftData) — DONE
+- [x] `Aurora/` sibling SwiftPM package (`Package.swift`: `swift-tools-version: 6.3`, `swiftLanguageModes: [.v6]`, 5 platforms `.v26`, `defaultLocalization: "en"`, `.package(name: "Nebula", path: "../")`). One repo, one CI, separate module graph → `import Aurora` from Nebula is a hard compile error (verified — closes the SwiftData placement risk; mirrors Meridian).
+- [x] `AuroraEntityMapping` — type-level protocol (static methods) bridging a SwiftData `@Model` (`PersistentModel`) to a Nebula `NebulaEntity` DTO: `toEntity`/`insert(_:in:)`/`update(_:from:)`/`descriptor(for:)`/`descriptor()`. Conformed with a caseless `enum: AuroraEntityMapping, Sendable`.
+- [x] `AuroraRepository<Mapping: AuroraEntityMapping & Sendable>` — `@ModelActor` `actor` conforming to `NebulaRepository` + read-only + keyed + writable + deletable. `@ModelActor` synthesizes the isolated `ModelContext` + `init(modelContainer:)`. `stream()` is `nonisolated` + Task hop (the port is synchronous); `count()`/`find(id:)`/`save(_:)`/`delete(_:)` are `async` on the actor. `Mapping: Sendable` absorbs the SE-0470 isolated-conformance warning. SwiftData errors rethrown untyped.
+- [x] `AuroraExample` executable — `@Model` + `NebulaEntity` + mapping + in-memory `ModelContainer` + `AuroraRepository` CRUD round-trip; `swift run AuroraExample` is the compile gate (NOT a shipped product).
+- [x] Tests — `AuroraRepositoryTests` (12) — CRUD (save insert + add-or-replace, find present/absent, count, stream all/empty, delete present/absent-no-op), port conformance for all four capability ports (assign-to-existential + cast-back), Sendable-across-`Task`. 12 Aurora tests / 3 suites green; zero warnings; release clean. Vault `03-padroes/nebula-aurora-swiftdata.md`; DocC `Aurora.docc/Aurora.md`.
+
+### Wave N4 — ADR + versioning + final gate — DONE (tag pending)
+- [x] `DECISIONS.md` — data+network ADR (Q1 = (c) Aurora sibling package, mirroring Meridian (d)). `VERSIONING.md` — Aurora N ↔ Nebula N ↔ OS N lockstep policy. `ARCHITECTURE.md` — Data + Network (Aurora) section + subtree rows + Structure tree. This roadmap.
+- [x] Vault — `data-network-open-questions.md` Q1 marked decided (c); `vault/Home.md` index updated (N1/N2/N3 shipped links).
+- [~] Tag `0.4.0` — **not tagged separately**; N1–N4 folded into the `0.5.0` release (owner decision, 2026-07-19). The `Done (0.4.0)` section above remains the milestone record.
+- [ ] Promote Aurora to its own public git repo + tag stream (documented future step; until then Aurora ships untagged, consumed by path)
+
+### Deferred (tracked below in "Later")
+- `NebulaCancellation`/`NebulaError.wrapAsync` (Wave H decision #13; N1 used a minimal `Task.checkCancellation()` form), WebSocket/SSE/higher-level remote API client (Q4 — defer until a second use earns it), preferences key-namespace policy + change observation (Q6 — lean v0.4 surface), Aurora `@Query` helper / `ModelContainer` factory / schema migration / relationship-walking (lean v0.4 surface).
+
+## Done (0.5.0 — Network layer)
+
+### Wave N5 — Endpoint / Client / Request model + gateway refactor — DONE
+- [x] `Architecture/Network/NebulaHTTPMethod.swift` — `enum: String, Sendable, Equatable, Hashable` (get/post/put/patch/delete/head).
+- [x] `Architecture/Network/NebulaHTTPEndpoint.swift` — the **port**: `protocol: Sendable { func urlRequest(against baseURL: URL?) throws -> URLRequest }` (non-generic, `URLRequestConvertible`, existential-friendly); `cachePolicy` via a default extension (`.protocolDefault`), overridable by conformers (a protocol requirement so existential dispatch honors the override).
+- [x] `Architecture/Network/NebulaHTTPRequest.swift` — the concrete **value type** (`struct: NebulaHTTPEndpoint, Sendable, Equatable`): `method`/`path`/`query`/`headers`/`body`/`cachePolicy`; `urlRequest(against:)` resolves the URL (relative→baseURL, absolute path, query appended not replaced — replicates Wave N1). **Reused as the server-side parsed-request type.**
+- [x] `Architecture/Network/NebulaHTTPBody.swift` — `enum: Sendable, Equatable { none, data(Data, contentType:), static func json(_:using:) throws }` — `.json` encodes **eagerly** so the value stays `Sendable`.
+- [x] `Architecture/Network/NebulaHTTPResponse.swift` — `struct: Sendable, Equatable { statusCode, headers, body: Data }` + `decode<T: Decodable & Sendable>(_:using:)`.
+- [x] `Architecture/Network/NebulaHTTPClient.swift` — the **client port**: `protocol NebulaHTTPClient: NebulaGateway { func send(_ endpoint:) async throws -> NebulaHTTPResponse }` (non-generic, Point-Free `send(_:)->Response` shape — existential-friendly); default extensions `send<T>(_:as:)` (decode) + the verb conveniences (`get`/`post`/`put`/`delete`) preserving the Wave N1 signatures.
+- [x] `Architecture/Gateway/NebulaHTTPGateway.swift` — refactored to conform to `NebulaHTTPClient` (verbs → default extension, `send(_:)` is core; `buildRequest` merges config headers for keys the request didn't set — per-request overrides config defaults; error bridging unchanged, no new `Kind` case).
+- [x] Tests — `ArchitectureNetworkTests` (endpoint→URLRequest building, response decode, client decode + verbs) + existing `ArchitectureHTTPGatewayTests` pass unchanged.
+
+### Wave N6 — Per-endpoint cache (Nebula over native URLCache) — DONE
+- [x] `Architecture/Network/NebulaHTTPCachePolicy.swift` — `enum: Sendable, Equatable, Hashable { protocolDefault, bypass, store(ttl: Duration), staleWhileRevalidate(ttl: Duration, maxStale: Duration) }`; defaulted on `NebulaHTTPEndpoint` to `.protocolDefault`.
+- [x] `Architecture/Network/NebulaHTTPCache.swift` — the **cache port**: `protocol: Sendable { response(for:policy:) -> NebulaCachedResponse?, store(_:for:policy:), remove(for:), removeAll() }`; `NebulaCachedResponse` carries `isStale` so the gateway kicks a background revalidate only when stale.
+- [x] `Architecture/Network/NebulaURLCache.swift` — the **façade**: `final class` wrapping `Mutex<State>` (native `URLCache` + Nebula TTL metadata; `URLCache` not `Sendable` → `Mutex` is the isolation boundary, `final class` derives `Sendable`, no `@unchecked`); `init(_ cache: sending URLCache = .shared)`. Fresh within TTL; stale within `ttl + maxStale`; orphaned-metadata cleanup if bytes evicted.
+- [x] `Architecture/Gateway/NebulaGatewayConfiguration.swift` — `cache: NebulaHTTPCache?` (default `nil`) threaded through all `.with*` builders + `withCache(_:)`.
+- [x] `Architecture/Gateway/NebulaHTTPGateway.swift` — `send` consults the cache (fresh → skip network; stale → serve + `Task.detached` background revalidate-and-store; 2xx → store); `.store`/`.staleWhileRevalidate` set `URLRequest.cachePolicy = .reloadIgnoringLocalCacheData` so Nebula's TTL wins.
+- [x] Tests — `ArchitectureHTTPCacheTests` (10) + 5 gateway cache integration tests in `ArchitectureHTTPGatewayTests`. 635 Nebula tests / 127 suites green; zero warnings; release clean. Vault `03-padroes/nebula-network-endpoint-client.md`; DocC `ArchitectureHTTPCache.md`.
+
+### Wave N7 — Local HTTP server (Network.framework NWListener) — DONE
+- [x] `Architecture/Network/NebulaHTTPServer.swift` — `final class: Sendable` over `NWListener`; each `NWConnection` runs in a `Task` (async-wrapped `receive`/`send`); `OnceFlag` `Mutex<Bool>` so `start()` resumes its continuation exactly once; `init(port:handler:)`/`start() async throws`/`stop()`; `port: NWEndpoint.Port?`. Scope "simple" (plain HTTP/1.1, no TLS/chunked/keep-alive, `Content-Length` body only). `Sendable` derived (no `@unchecked`).
+- [x] `Architecture/Network/NebulaHTTPRequestParser.swift` — internal bounded HTTP/1.1 parser; rejects negative/non-numeric/oversized (`> 10 MiB`) `Content-Length` (adversarial-review crash fix — a negative value would build a reversed `Range` and trap).
+- [x] `Architecture/Network/NebulaHTTPServerError.swift` — per-layer open struct `: NebulaFailure, Equatable, Hashable` (mirrors `NebulaRepositoryError`); `coarseKind` → `NebulaError.Kind`; `toNebulaError(kind:)`; `NWError` folded into message (not boxed, lossy).
+- [x] Serializer hardenings — case-insensitive `Content-Length` overwrite; `\r\n` strip on handler headers.
+- [x] Tests — `ArchitectureHTTPServerTests` (parser / serializer / error + real localhost round-trip `NebulaHTTPServer` + `NebulaHTTPGateway` over `URLSession`, `@Suite(.serialized)`, OS-assigned ephemeral port — no `URLProtocol` stub). 635 Nebula tests / 127 suites green; zero warnings; release clean. Vault `03-padroes/nebula-network-endpoint-client.md`; DocC `ArchitectureHTTPServer.md`.
+
+### Wave N8 — ADR + governance + final gate — DONE (tag pending)
+- [x] `DECISIONS.md` — Network layer ADR (Waves N5–N8: non-generic client, cache-over-native-URLCache, NWListener server; Accepted). `ARCHITECTURE.md` — `Network/` subtree row + structure tree + Data + Network prose. This roadmap.
+- [x] Vault — `nebula-network-endpoint-client.md` marked `status: shipped` / `shipped: "0.5.0"`; `vault/Home.md` index updated (N5–N8 shipped link).
+- [x] DocC — `ArchitectureNetwork.md`/`ArchitectureHTTPCache.md`/`ArchitectureHTTPServer.md` (indexed in `Architecture.md` after `ArchitectureGateway`).
+- [x] Final gate — `rm -rf .build && swift test` (635 tests / 127 suites, zero warnings); Aurora green; `swift build -c release` clean; per-platform `xcodebuild` (iOS/macOS/tvOS/watchOS/visionOS); DocC `xcodebuild docbuild`.
+- [x] Tag `0.5.0` — tagged (user action, completed)
+
+### Deferred (tracked below in "Later")
+- Request middleware/interceptors (auth-token injection, 401 refresh-and-retry), streaming (`bytes(for:)`/SSE/WebSocket — Q4 deferred), multipart upload, `download(for:)`-to-disk, pagination `AsyncSequence`. Later waves on request.
 
 ## Later (post-0.1.0)
 

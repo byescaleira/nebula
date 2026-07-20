@@ -46,6 +46,13 @@ public struct NebulaGatewayConfiguration: Sendable {
     public let logger: NebulaLogger?
     /// An optional request timeout.
     public let timeout: Duration?
+    /// An optional per-endpoint cache (``NebulaHTTPCache``). When set, the
+    /// gateway consults it before a network fetch for Nebula-managed policies
+    /// (``NebulaHTTPCachePolicy/store(ttl:)`` /
+    /// ``NebulaHTTPCachePolicy/staleWhileRevalidate(ttl:maxStale:)``) and stores
+    /// successful responses into it. `nil` (default) delegates caching to
+    /// `URLSession`'s native HTTP cache.
+    public let cache: NebulaHTTPCache?
     /// Invoked with a ``NebulaErrorEvent`` on a gateway error. The default
     /// `{ _ in }` is capture-free and trivially `Sendable`.
     public let handler: @Sendable (NebulaErrorEvent) -> Void
@@ -58,6 +65,7 @@ public struct NebulaGatewayConfiguration: Sendable {
         encoder: NebulaJSONEncoder = NebulaJSONEncoder(),
         logger: NebulaLogger? = nil,
         timeout: Duration? = nil,
+        cache: NebulaHTTPCache? = nil,
         handler: @escaping @Sendable (NebulaErrorEvent) -> Void = { _ in }
     ) {
         self.endpoint = endpoint
@@ -66,6 +74,7 @@ public struct NebulaGatewayConfiguration: Sendable {
         self.encoder = encoder
         self.logger = logger
         self.timeout = timeout
+        self.cache = cache
         self.handler = handler
     }
 
@@ -77,37 +86,42 @@ public struct NebulaGatewayConfiguration: Sendable {
 
     /// Returns a copy with the endpoint replaced.
     public func withEndpoint(_ endpoint: URL?) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     /// Returns a copy with the headers replaced.
     public func withHeaders(_ headers: [String: String]) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     /// Returns a copy with the decoder replaced.
     public func withDecoder(_ decoder: NebulaJSONDecoder) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     /// Returns a copy with the encoder replaced.
     public func withEncoder(_ encoder: NebulaJSONEncoder) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     /// Returns a copy with the logger replaced.
     public func withLogger(_ logger: NebulaLogger?) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     /// Returns a copy with the timeout replaced.
     public func withTimeout(_ timeout: Duration?) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
+    }
+
+    /// Returns a copy with the per-endpoint cache replaced.
+    public func withCache(_ cache: NebulaHTTPCache?) -> NebulaGatewayConfiguration {
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     /// Returns a copy with the handler replaced.
     public func withHandler(_ handler: @escaping @Sendable (NebulaErrorEvent) -> Void) -> NebulaGatewayConfiguration {
-        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, handler: handler)
+        .init(endpoint: endpoint, headers: headers, decoder: decoder, encoder: encoder, logger: logger, timeout: timeout, cache: cache, handler: handler)
     }
 
     // MARK: - Reporting

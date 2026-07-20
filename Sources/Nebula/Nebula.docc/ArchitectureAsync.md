@@ -8,14 +8,21 @@ An async `Result` pipeline and `AsyncSequence` ergonomics mirroring the Collecti
 
 - `AsyncSequence.nebulaChunked(byCount:)` / `nebulaUniqued(on:)` / `nebulaUniqued()` — the async analogs of the Collection `nebula*` helpers, constrained to `Self: Sendable, Element: Sendable` and returning the concrete `AsyncThrowingStream` (the iteration runs in a `Task` capturing only `Sendable` state). The `nebula*` prefix avoids stdlib namespace pollution.
 
+- ``NebulaRetryPolicy`` / ``NebulaRetry`` / ``NebulaRetryJitter`` (Wave N1) — a framework-agnostic retry loop for any `async throws` operation. `NebulaRetryPolicy` is a `Sendable` value (NOT `Equatable` — it stores a `@Sendable` `isRetriable` predicate): `maxAttempts` (total, including the first), `baseDelay`, `multiplier`, `maxDelay`, `jitter` (`.none`/`.full`/`.equal`), and the predicate. `NebulaRetry.withPolicy(_:sleeper:operation:)` retries on errors the predicate accepts, honors cancellation (a `CancellationError` is never retried; a cancellation during `sleeper` propagates out), and rethrows the original error on exhaustion or for non-retriable errors. The `sleeper` is injectable for tests. The concrete ``NebulaHTTPGateway`` wraps its `URLSession` call in it.
+
 ```swift
 let pipeline = NebulaResultPipeline(value: 21)
 let doubled = await pipeline.map { $0 * 2 }   // .success(42)
 
 for try await chunk in stream.nebulaChunked(byCount: 2) { /* [1,2], [3,4], [5] */ }
+
+// Retry a flaky call with full-jitter exponential backoff.
+let value = try await NebulaRetry.withPolicy(.init(maxAttempts: 4)) {
+    try await flaky()
+}
 ```
 
-A cooperative-cancellation helper (`NebulaCancellation`) and `NebulaError.wrapAsync` were deferred — callers reuse `Task.checkCancellation()` and an inline do/catch.
+A cooperative-cancellation helper (`NebulaCancellation`) and `NebulaError.wrapAsync` were deferred — callers reuse `Task.checkCancellation()` and an inline do/catch (NebulaRetry uses the minimal `Task.checkCancellation()` form).
 
 ## Topics
 
@@ -24,6 +31,11 @@ A cooperative-cancellation helper (`NebulaCancellation`) and `NebulaError.wrapAs
 - ``NebulaResultPipeline/map(_:)``
 - ``NebulaResultPipeline/flatMap(_:)``
 - ``NebulaResultPipeline/recover(_:)``
+
+### Retry
+- ``NebulaRetryPolicy``
+- ``NebulaRetry``
+- ``NebulaRetryJitter``
 
 ### AsyncSequence ergonomics
 - ``AsyncSequence/nebulaChunked(byCount:)``
