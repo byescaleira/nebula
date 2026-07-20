@@ -6,7 +6,7 @@ related: [[nebula-errors], [nebula-swift6-concurrency], [nebula-spm-architecture
 
 # Nebula Error Taxonomy + Typed Throws (Architecture Toolkit)
 
-Synthesis note for the architecture-toolkit error dimension. Recommends **protocol + per-layer open structs** (`NebulaFailure` + `NebulaDomainError`/`NebulaRepositoryError`/`NebulaValidationError`) bridging to the closed `NebulaError.Kind` enum WITHOUT adding cases. The root docs ([[ARCHITECTURE]], [[DECISIONS]]) and `Sources/Nebula/Errors/NebulaError.swift` are source of truth; this note is synthesis.
+Synthesis note for the architecture-toolkit error dimension. Recommends **protocol + per-layer open structs** (`NebulaFailure` + `NebulaDomainError`/`NebulaRepositoryError`/`NebulaValidationError`) bridging to the closed `NebulaError.Kind` enum WITHOUT adding cases. The root docs (`ARCHITECTURE.md`, `DECISIONS.md`) and `Sources/Nebula/Errors/NebulaError.swift` are source of truth; this note is synthesis.
 
 ## The two options compared
 
