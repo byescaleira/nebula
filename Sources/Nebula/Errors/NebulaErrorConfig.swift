@@ -37,4 +37,11 @@ public enum NebulaErrorConfig {
     public static func report(_ error: NebulaError) {
         get().report(error)
     }
+
+    /// Resolves an optional ``NebulaUserError`` for `error` through the current
+    /// configuration (convenience over `NebulaErrorConfig.get().userError(for:)`).
+    /// Not gated on reporting: user-message mapping is orthogonal to reporting.
+    public static func userError(for error: NebulaError) -> NebulaUserError? {
+        get().userError(for: error)
+    }
 }

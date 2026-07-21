@@ -236,7 +236,7 @@ struct NebulaMeasureConfigurationBuilderTests {
     }
 }
 
-@Suite("NebulaMeasureConfig process-wide accessor")
+@Suite("NebulaMeasureConfig process-wide accessor", .serialized)
 struct NebulaMeasureConfigTests {
     @Test func getReturnsDefaultBeforeAnySet() {
         // Restore in case another test in this process set state.

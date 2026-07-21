@@ -8,12 +8,15 @@ Nebula is a Swift foundation/architecture SwiftPM library — the sibling of [Co
 
 ### Configuration contracts
 
-Four `Sendable` value-type configuration structs flow through explicit injection (there is no SwiftUI environment):
+Seven `Sendable` value-type configuration structs flow through explicit injection (there is no SwiftUI environment):
 
 - ``NebulaLogConfiguration`` — logging behavior.
 - ``NebulaErrorConfiguration`` — error reporting.
 - ``NebulaStandards`` — formatting policy.
 - ``NebulaMeasureConfiguration`` — measurement.
+- ``NebulaEnvironmentConfiguration`` — environment + per-environment base URLs and overrides.
+- ``NebulaNotificationsConfiguration`` — notification callback handlers (`willPresent` / `didReceive`), architecture-layer config — see <doc:ArchitectureNotifications>.
+- ``NebulaBackgroundTaskConfiguration`` — background-task launch handler, architecture-layer config (macOS/watchOS-unavailable surface) — see <doc:ArchitectureBackgroundTasks>.
 
 ### Articles
 
@@ -21,5 +24,6 @@ Four `Sendable` value-type configuration structs flow through explicit injection
 - <doc:Errors>
 - <doc:Extensions>
 - <doc:Standardize>
+- <doc:Environment>
 - <doc:Measure>
 - <doc:Architecture>

@@ -9,6 +9,8 @@ researched: "2026-07-19"
 # Nebula — Network hardening + advanced transport
 
 > Research depth for the network-hardening dimension of [[nebula-app-readiness-research]]. Verified against `Foundation.swiftmodule/arm64e-apple-ios.swiftinterface` + `NSURLSession.h` + `Security.framework/Headers/SecTrust.h`/`SecCertificate.h` (Xcode 27 Beta 3). UNVERIFIED items flagged inline.
+>
+> **Shipped:** the SSL pinning half shipped as **N17a / 0.14.0** → [[nebula-ssl-pinning]] (the scope correction — pinning is transport-layer, not interceptor — and the derived-`Sendable` `NSObject` delegate verdict are documented there). SSE/WebSocket/multipart/download/pagination remain N17b/N17c below.
 
 ## Dimension overview
 

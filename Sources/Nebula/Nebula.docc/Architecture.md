@@ -23,7 +23,7 @@ Dependencies point **inward only**. The inner layers (Entities, Use Cases) know 
 
 ### Error taxonomy
 
-Layer errors are **per-layer open structs** conforming to ``NebulaFailure`` — ``NebulaDomainError``, ``NebulaValidationError``, ``NebulaRepositoryError`` — each bridging to the closed ``NebulaError/Kind`` enum via a caller-picked ``NebulaFailure/toNebulaError(kind:)``. Nebula never adds cases to the closed `Kind` enum; fine-grained taxonomy lives in an open `String` `code`. Per SE-0413, public Nebula APIs use untyped `throws`; ``NebulaError`` is an opt-in concrete `Failure` (``NebulaUseCase/executeTyped(_:)`` narrows to `throws(NebulaError)`).
+Layer errors are **per-layer open structs** conforming to ``NebulaFailure`` — ``NebulaDomainError``, ``NebulaValidationError``, ``NebulaRepositoryError``, ``NebulaKeychainError`` — each bridging to the closed ``NebulaError/Kind`` enum via a caller-picked ``NebulaFailure/toNebulaError(kind:)``. Nebula never adds cases to the closed `Kind` enum; fine-grained taxonomy lives in an open `String` `code`. Per SE-0413, public Nebula APIs use untyped `throws`; ``NebulaError`` is an opt-in concrete `Failure` (``NebulaUseCase/executeTyped(_:)`` narrows to `throws(NebulaError)`).
 
 ### Dependency injection without a framework
 
@@ -39,14 +39,25 @@ Nebula ships ``NebulaFakeRepository``, ``NebulaStubUseCase``, and ``NebulaSpyUse
 - <doc:ArchitectureDomain>
 - <doc:ArchitecturePorts>
 - <doc:ArchitectureErrors>
+- <doc:ArchitectureUserError>
 - <doc:ArchitectureUseCase>
 - <doc:ArchitectureRepository>
 - <doc:ArchitectureGateway>
 - <doc:ArchitectureNetwork>
 - <doc:ArchitectureHTTPCache>
 - <doc:ArchitectureHTTPServer>
+- <doc:ArchitectureAuth>
+- <doc:ArchitectureSSLPinning>
+- <doc:ArchitectureStreaming>
+- <doc:ArchitectureBodiesDownloads>
 - <doc:ArchitecturePreferences>
+- <doc:ArchitectureKeychain>
+- <doc:ArchitectureFeatureFlags>
+- <doc:ArchitectureNotifications>
+- <doc:ArchitecturePermissions>
+- <doc:ArchitectureBackgroundTasks>
 - <doc:ArchitectureValidation>
 - <doc:ArchitectureRegistry>
+- <doc:ArchitectureCompositionRoot>
 - <doc:ArchitectureTesting>
 - <doc:ArchitectureAsync>

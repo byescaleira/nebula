@@ -40,3 +40,8 @@ A cooperative-cancellation helper (`NebulaCancellation`) and `NebulaError.wrapAs
 ### AsyncSequence ergonomics
 - ``AsyncSequence/nebulaChunked(byCount:)``
 - ``AsyncSequence/nebulaUniqued(on:)``
+
+### Pagination
+- ``NebulaPagedSequence`` — a generic `Sendable` pagination helper returning `AsyncThrowingStream<Page, any Error>`. `first` / `next` `@Sendable` closures decouple cursor transport (the app's concern — URL query item, header, or body token) from the loop (Nebula's concern), stopping when `next` returns `nil`. The loop honors cancellation (the consumer's iteration ends normally on cancel) and surfaces `first`/`next` errors; it is a custom loop (the cursor mutates per page, the SSE `Last-Event-ID` shape), **not** ``NebulaRetry/withPolicy`` (which is nullary). See <doc:ArchitectureBodiesDownloads> for the full surface.
+
+<!-- Copyright (c) 2026 Nebula. All rights reserved. -->

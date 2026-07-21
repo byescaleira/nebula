@@ -7,8 +7,10 @@ Nebula is a Swift foundation/architecture SwiftPM library (sibling of Cosmos, th
 - Platforms: **iOS / macOS / tvOS / watchOS / visionOS — all at `.v26`**. Every public type must compile and behave well on all 5.
 - Single target `Nebula`, no third-party dependencies. Tests in `NebulaTests` (Swift Testing, no UI snapshots, no ViewInspector — Nebula has no UI).
 
-## No UIKit
-Never author UIKit symbols: no `import UIKit`, `UIColor`, `UIViewController`, `UIHostingController`, or `#if canImport(UIKit)`. Nebula is Foundation-only (plus `os`, `Synchronization`, `_Concurrency`, and `CryptoKit` behind `NebulaHashAlgorithm`). Foundation APIs that wrap UIKit internally are not invoked from Nebula. There is no haptics/font/CoreText surface — those are Cosmos concerns.
+## No UIKit / no SwiftUI / no SwiftData
+Never author UIKit symbols: no `import UIKit`, `UIColor`, `UIViewController`, `UIHostingController`, or `#if canImport(UIKit)`. Never author SwiftUI or SwiftData symbols. Foundation APIs that wrap UIKit internally are not invoked from Nebula. There is no haptics/font/CoreText surface — those are Cosmos concerns.
+
+**Allowed system frameworks (non-UI only):** `Foundation`, `os`, `Synchronization`, `_Concurrency`, `CryptoKit` (behind `NebulaHashAlgorithm`), `Network` (precedent: `NebulaHTTPServer`), `Security` (Keychain `SecItem*` + SSL pinning `SecTrust*`), `BackgroundTasks`, `UserNotifications`, `MetricKit`, `StoreKit`. The principle: any **non-UI Apple system framework** is admissible if a feature needs it and it can be gated to all 5 platforms (or explicit per-platform `@available(<platform>, unavailable)` for the subset that lacks it). Never UIKit/SwiftUI/SwiftUI-bridged (`TipKit` is `@_exported import SwiftUI` → Cosmos-only). Every platform-restricted surface MUST use explicit per-platform `@available` gates (e.g. `@available(macOS 26, unavailable)` + `@available(watchOS 26, unavailable)`) — **NOT `@available(iOS 13, *)`**, whose `*` fallback enables ALL platforms.
 
 ## Foundation contracts — Sendable struct + @Sendable handler + .with* (NO @Entry)
 Nebula has **no SwiftUI** — no `@Entry`, no `@Observable`, no `@MainActor` default isolation, no `@Environment`. Cross-cutting concerns flow through four Sendable value-type configuration structs, each with a `@Sendable` handler and fluent `.with*` builders (mirror `CosmosConfiguration`/`CosmosLogConfiguration`/`CosmosErrorConfiguration`, minus the SwiftUI environment plumbing):
