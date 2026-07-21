@@ -118,7 +118,7 @@ import Foundation
 
     @Test func builderIsSendableAcrossTask() async throws {
         let builder = NebulaMultipartBuilder(boundary: "B").adding(.field(name: "k", value: "v"))
-        let built = try await Task { builder.build() }.value
+        let built = await Task { builder.build() }.value
         #expect(built.boundary == "B")
     }
 
@@ -169,7 +169,7 @@ import Foundation
 
     @Test func multipartErrorIsSendableAcrossTask() async throws {
         let err = NebulaMultipartError.buildFailed("x")
-        let back = try await Task { err }.value
+        let back = await Task { err }.value
         #expect(back.kind == .buildFailed)
     }
 }

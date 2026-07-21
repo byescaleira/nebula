@@ -6,7 +6,7 @@ related: [nebula-feature-flags, nebula-app-readiness-research, nebula-swift6-con
 
 # Nebula — CloudKit-backed observability suite (metrics / analytics / feature flags / performance)
 
-> **Status: Proposed (design, on branch `worktree-cloudkit-observability-design`).** Source of truth = root docs (`ARCHITECTURE.md`, `DECISIONS.md`, `ROADMAP.md`); this note is the synthesis. The CloudKit admissibility facts here were verified against the `.swiftinterface` (Xcode 27 Beta 3 / Swift 6.4) — the authoritative ground truth per `CLAUDE.md`.
+> **Status: Shipped (Wave N19 complete — Nebula 0.17.0, merged to `main` via PR #3).** Source of truth = root docs (`ARCHITECTURE.md`, `DECISIONS.md`, `ROADMAP.md`); this note is the synthesis. The CloudKit admissibility facts here were verified against the `.swiftinterface` (Xcode 27 Beta 3 / Swift 6.4) — the authoritative ground truth per `CLAUDE.md`.
 
 ## The question
 
@@ -175,7 +175,7 @@ No environment, no singletons beyond the existing `Nebula*Config` accessors. Exp
 - N19a — `NebulaMetrics` port + `NebulaMetricEvent`/`NebulaMetricValue` + `NebulaMetricsConfiguration`/`NebulaMetricsConfig` + in-memory `NebulaLocalMetrics` + `NebulaEventBuffer<T>`.
 - N19b — `NebulaAnalytics` port + `NebulaAnalyticsEvent` + `NebulaAnalyticsConfiguration`/`NebulaAnalyticsConfig` + in-memory façade (reuses `NebulaEventBuffer`).
 - N19c — `NebulaCloudKitConfiguration`/`NebulaCloudKitConfig` + `NebulaCloudKitSync` port + `NebulaCloudKitSyncEngine` (`CKSyncEngine` wrapper + `@Sendable` delegate bridge).
-- N19d — `NebulaCloudKitFeatureFlags` (`NebulaRemoteFeatureFlags` conformer, pull via `fetchChanges`) + `NebulaCloudKitPreferences` (`NebulaPreferences` conformer).
+- N19d — `NebulaCloudKitFeatureFlags` (`NebulaRemoteFeatureFlags` conformer — read-only; `value(forKey:)` serves a local cache, `refresh()` pulls `NebulaFlag` records and replaces the cache leaving it unchanged on failure; injectable `fetch`; public `encode(_:into:)`/`decode(from:)` record codec) + `NebulaCloudKitPreferences` (`NebulaPreferences` conformer — local sync cache + async sink). **SHIPPED 0.17.0** — both conformers landed in the same release once `NebulaRemoteFeatureFlags` reached `main`.
 - N19e — `NebulaPerformanceSink` (wires `NebulaMeasureConfiguration.handler` → `NebulaMetrics`) + the analytics/metrics → `CKModifyRecordsOperation` flush path.
 - N19f — DocC `ArchitectureCloudKit.md` article + runnable app-owned example (extend `MeridianExample` or new `NebulaCloudKitExample`).
 

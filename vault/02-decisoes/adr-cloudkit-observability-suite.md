@@ -2,7 +2,7 @@
 tags: [adr, decision, cloudkit, observability]
 aliases: [ADR-CloudKit-Observability, nebula-cloudkit-adr]
 related: [nebula-cloudkit-observability, nebula-app-readiness-research, nebula-feature-flags, nebula-swift6-concurrency]
-status: Implemented (N19a/b/c/e shipped; N19d deferred)
+status: Implemented (N19a–e complete; shipped 0.17.0)
 date: 2026-07-20
 ---
 
@@ -49,25 +49,26 @@ Every config defaults to a capture-free no-op handler and `isEnabled: false` for
 
 ## Status
 
-**Implemented (N19a/b/c/e shipped on branch `worktree-cloudkit-observability-design`); N19d deferred.** Wave N19 source compiled + tested clean:
+**Implemented — Wave N19 complete (N19a–e), shipped as Nebula 0.17.0 on `main` (merged PR #3 `worktree-cloudkit-observability-design`).** Wave N19 source compiled + tested clean across all 5 platforms:
 
 - N19a Metrics — `NebulaMetricValue` / `NebulaMetricEvent` / `NebulaMetricKind` / `NebulaEventBuffer<Event>` / `NebulaMetrics` (port + counter/histogram/gauge/timing default exts) / `NebulaMetricsConfiguration` / `NebulaMetricsConfig` / `NebulaLocalMetrics`.
 - N19b Analytics — `NebulaAnalyticsEvent` / `NebulaAnalytics` (port + track/screen/identify default exts) / `NebulaAnalyticsConfiguration` / `NebulaAnalyticsConfig` / `NebulaLocalAnalytics` (reuses `NebulaEventBuffer`).
 - N19c CloudKit glue — `NebulaCloudKitEnvironment` / `NebulaCloudKitConfiguration` / `NebulaCloudKitConfig` / `NebulaCloudKitSync` (port + `sync()` default ext) / `NebulaCloudKitSyncEngine` (`CKSyncEngine` wrapper + `@Sendable` delegate adapter).
 - N19e PerformanceSink — `NebulaPerformanceSink` (routes `NebulaMeasureResult` → `NebulaMetricsConfiguration`).
-- N19d PARTIAL — `NebulaCloudKitPreferences` (conforms `NebulaPreferences`, committed port) shipped: a local synchronous cache + an injectable async sink that flushes each `NebulaCloudKitKVChange` to CloudKit (default sink maps a key/value to a `CKRecord` in the configured zone, save/delete stateless per call — the `NebulaKeychain` precedent, no `CKDatabase` stored, `Sendable` derived with no `@unchecked`), plus `ensureZone()` / `refresh()` extras. 678 tests / 142 suites green (5 new); all 5 platforms compile; release clean. `NebulaCloudKitFeatureFlags` (conforms `NebulaRemoteFeatureFlags`) remains DEFERRED — that port is uncommitted in the owner's working copy (N9–N18 WIP); revisit once committed. CKDatabase-Sendability-when-stored was probe-verified (a `final class: Sendable { let db: CKDatabase }` derives Sendable cleanly), though the shipped conformer stores no `CKDatabase` (stateless per-call sink).
-- N19f DocC `ArchitectureCloudKitObservability.md` article added (not yet indexed in `Architecture.md` — owner follow-up; that file is mid-flight in the working copy).
+- N19d COMPLETE — `NebulaCloudKitPreferences` (conforms `NebulaPreferences`: local synchronous cache + an injectable async sink that flushes each `NebulaCloudKitKVChange` to CloudKit — default sink maps a key/value to a `CKRecord` in the configured zone, save/delete stateless per call, the `NebulaKeychain` precedent, no `CKDatabase` stored, `Sendable` derived with no `@unchecked`; plus `ensureZone()` / `refresh()` extras) **AND** `NebulaCloudKitFeatureFlags` (conforms `NebulaRemoteFeatureFlags`: read-only; `value(forKey:)` serves a local `Mutex<[String: NebulaFlagValue]>` cache; `refresh()` pulls `NebulaFlag` records and replaces the cache, leaving it unchanged on failure — the port contract; injectable `fetch`, default compile-verified; public `encode(_:into:)`/`decode(from:)` record codec — a `kind` tag + per-kind field, pure, unit-testable with an in-memory `CKRecord`, no iCloud). The earlier "N19d PARTIAL / deferred" status reflected `NebulaRemoteFeatureFlags` being uncommitted in the owner's working copy at PR-merge time; that port is now on `main`, so the conformer shipped in the same 0.17.0 release. CKDatabase-Sendability-when-stored was probe-verified (a `final class: Sendable { let db: CKDatabase }` derives Sendable cleanly), though both shipped conformers store no `CKDatabase` (stateless per-call boundary).
+- N19f DocC — `ArchitectureCloudKitObservability.md` article shipped AND indexed in `Architecture.md` (after `ArchitectureBackgroundTasks`); the N19d remainder added the CloudKit feature-flags topics + prose.
 
-Verification: `swift build` + `swift test` (678 tests / 142 suites, +41 new over the 0.8.0 baseline) green with zero concurrency warnings (3/3 stable runs); `swift build -c release` clean; adversarial verify workflow (binding/Sendable, CloudKit availability vs `.swiftinterface`, pattern fidelity) clean apart from 2 minor findings (both fixed: added `NebulaCloudKitSync.sync()` default extension, fixed a doc-comment indent). **Per-platform cross-compile confirmed**: `swift build --triple arm64-apple-tvos26.0` / `watchos26.0` / `xros26.0` all green (host macOS + iOS already green) — all 5 platforms compile the CloudKit path ungated, including `NebulaCloudKitPreferences`.
+Verification: `swift build` + `swift test` (963 tests / 194 suites, +55 over the 0.16.0 bundle) green with zero concurrency warnings; `swift build -c release` clean; adversarial verify workflow (binding/Sendable, CloudKit availability vs `.swiftinterface`, pattern fidelity) clean apart from 2 minor findings (both fixed: added `NebulaCloudKitSync.sync()` default extension, fixed a doc-comment indent). **Per-platform cross-compile confirmed**: `swift build --triple arm64-apple-tvos26.0` / `watchos26.0` / `xros26.0` all green (host macOS + iOS already green) — all 5 platforms compile the CloudKit path ungated, including both N19d conformers.
 
-## Root-doc follow-up (owner action)
+## Root-doc follow-up (done)
 
-When merging this design into the working copy:
-- `DECISIONS.md` — add the ADR row (this note's content, condensed) to the table tail.
-- `ARCHITECTURE.md` — add the `CloudKit/` (or `Observability/`) subtree row + prose.
-- `ROADMAP.md` — add Wave N19 after the current latest wave.
-- `CHANGELOG.md` — add the entry under the next version.
-- `vault/03-padroes/nebula-app-readiness-research.md` — replace the CloudKit row's verdict from "Defer (sibling)" to "Façade in Nebula core (Wave N19)" with the corrected Sendability facts. (This row is mid-flight/uncommitted in the owner working copy, so the correction is applied there, not on this branch.)
+The root-doc governance landed with the 0.17.0 release:
+- `DECISIONS.md` — N19 ADR row appended (Accepted).
+- `ARCHITECTURE.md` — `Metrics/` + `Analytics/` + `CloudKit/` + `PerformanceSink` subtree row + structure tree + prose bullet.
+- `ROADMAP.md` — `## Done (0.17.0 — CloudKit-backed observability)` section inserted; "Last updated" header refreshed.
+- `CHANGELOG.md` — `## [0.17.0] - 2026-07-21` entry under `[Unreleased]`.
+- `CLAUDE.md` — allowed-frameworks list += `CloudKit` (the corrected Sendability facts).
+- `vault/03-padroes/nebula-app-readiness-research.md` — CloudKit row verdict corrected from "Defer (sibling)" to "Façade in Nebula core (Wave N19)", ✅ shipped 0.17.0.
 
 ## Related
 

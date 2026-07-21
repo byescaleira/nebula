@@ -120,12 +120,12 @@ private final class RecordingInterceptor: NebulaHTTPInterceptor {
     private let retryCount = Mutex<Int>(0)
 
     func adapt(_ endpoint: NebulaHTTPEndpoint) async throws -> NebulaHTTPEndpoint {
-        _ = adaptCount.withLock { $0 += 1 }
+        adaptCount.withLock { $0 += 1 }
         return endpoint
     }
 
     func retry(_ error: any Error, for endpoint: NebulaHTTPEndpoint, attempt: Int) async throws -> NebulaHTTPEndpoint? {
-        _ = retryCount.withLock { $0 += 1 }
+        retryCount.withLock { $0 += 1 }
         return nil
     }
 

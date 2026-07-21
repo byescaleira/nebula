@@ -70,7 +70,7 @@ private final class SendableBox<T: Sendable>: Sendable {
 
     @Test func configurationIsSendableAcrossTask() async throws {
         let config = NebulaDownloadConfiguration.default.withResumeDelay(.milliseconds(1))
-        let back = try await Task { config }.value
+        let back = await Task { config }.value
         #expect(back.resumeDelay == .milliseconds(1))
     }
 

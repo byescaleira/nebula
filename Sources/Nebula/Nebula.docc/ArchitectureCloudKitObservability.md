@@ -114,3 +114,24 @@ not stored on the conformer, so their preconcurrency Sendability never reaches a
 ### CloudKit preferences (N19d)
 - ``NebulaCloudKitPreferences``
 - ``NebulaCloudKitKVChange``
+
+### CloudKit feature flags (N19d)
+- ``NebulaCloudKitFeatureFlags``
+
+A ``NebulaRemoteFeatureFlags`` conformer backed by a local cache refreshed from
+CloudKit — the read-only counterpart to ``NebulaCloudKitPreferences``.
+``value(forKey:)`` serves the local `Mutex<[String: NebulaFlagValue]>` cache
+(synchronous, the ``NebulaFeatureFlags`` contract); ``refresh()`` pulls
+`NebulaFlag` records from the configured database and replaces the cache, leaving
+it unchanged on failure (the port contract — reads keep resolving to the last good
+fetch). The conformer is **read-only**: the port has no write requirement, and
+writing flag records to CloudKit is app-owned. The CloudKit boundary is stateless
+per call (the ``NebulaKeychain`` precedent) — no `CKDatabase` is stored, so
+`Sendable` is derived with **no `@unchecked`** (config `Sendable` struct +
+`Mutex` absorbed behind the `final class` + `@Sendable` fetch closure). The fetch
+is injectable, so the cache/refresh contract is unit-tested without CloudKit I/O;
+the default fetch (``NebulaCloudKitFeatureFlags/defaultFetch(configuration:)``) is
+compile-verified (runtime needs an iCloud entitlement + account). Flag records are
+mapped to/from ``NebulaFlagValue`` by ``NebulaCloudKitFeatureFlags/encode(_:into:)``
+/ ``NebulaCloudKitFeatureFlags/decode(from:)`` — a `kind` tag + a per-kind field,
+pure and unit-testable with an in-memory `CKRecord` (no iCloud).

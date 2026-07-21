@@ -56,6 +56,7 @@ Nebula ships ``NebulaFakeRepository``, ``NebulaStubUseCase``, and ``NebulaSpyUse
 - <doc:ArchitectureNotifications>
 - <doc:ArchitecturePermissions>
 - <doc:ArchitectureBackgroundTasks>
+- <doc:ArchitectureCloudKitObservability>
 - <doc:ArchitectureValidation>
 - <doc:ArchitectureRegistry>
 - <doc:ArchitectureCompositionRoot>
