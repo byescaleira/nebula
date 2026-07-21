@@ -2,7 +2,7 @@
 tags: [adr, decision, cloudkit, observability]
 aliases: [ADR-CloudKit-Observability, nebula-cloudkit-adr]
 related: [nebula-cloudkit-observability, nebula-app-readiness-research, nebula-feature-flags, nebula-swift6-concurrency]
-status: Proposed
+status: Implemented (N19a/b/c/e shipped; N19d deferred)
 date: 2026-07-20
 ---
 
@@ -49,7 +49,16 @@ Every config defaults to a capture-free no-op handler and `isEnabled: false` for
 
 ## Status
 
-**Proposed.** Implementation planned as Roadmap **Wave N19** (N19a metrics → N19b analytics → N19c CloudKit glue → N19d feature-flag/preferences conformers → N19e performance sink → N19f DocC + example). NOT yet compiled — the source scaffolding depends on the FeatureFlags port, which is currently uncommitted in the owner's working copy (N9–N18 WIP); N19 should branch from the owner's current state once that WIP is committed.
+**Implemented (N19a/b/c/e shipped on branch `worktree-cloudkit-observability-design`); N19d deferred.** Wave N19 source compiled + tested clean:
+
+- N19a Metrics — `NebulaMetricValue` / `NebulaMetricEvent` / `NebulaMetricKind` / `NebulaEventBuffer<Event>` / `NebulaMetrics` (port + counter/histogram/gauge/timing default exts) / `NebulaMetricsConfiguration` / `NebulaMetricsConfig` / `NebulaLocalMetrics`.
+- N19b Analytics — `NebulaAnalyticsEvent` / `NebulaAnalytics` (port + track/screen/identify default exts) / `NebulaAnalyticsConfiguration` / `NebulaAnalyticsConfig` / `NebulaLocalAnalytics` (reuses `NebulaEventBuffer`).
+- N19c CloudKit glue — `NebulaCloudKitEnvironment` / `NebulaCloudKitConfiguration` / `NebulaCloudKitConfig` / `NebulaCloudKitSync` (port + `sync()` default ext) / `NebulaCloudKitSyncEngine` (`CKSyncEngine` wrapper + `@Sendable` delegate adapter).
+- N19e PerformanceSink — `NebulaPerformanceSink` (routes `NebulaMeasureResult` → `NebulaMetricsConfiguration`).
+- N19d DEFERRED — `NebulaCloudKitFeatureFlags` (conforms `NebulaRemoteFeatureFlags`) needs the FeatureFlags port, which is uncommitted in the owner's working copy (N9–N18 WIP); `NebulaCloudKitPreferences` (conforms `NebulaPreferences`) has a sync/async-shape tension to resolve. Revisit once N9–N18 is committed.
+- N19f DocC `ArchitectureCloudKitObservability.md` article added (not yet indexed in `Architecture.md` — owner follow-up; that file is mid-flight in the working copy).
+
+Verification: `swift build` + `swift test` (673 tests / 141 suites, +36 new) green with zero concurrency warnings; `swift build -c release` clean; adversarial verify workflow (binding/Sendable, CloudKit availability vs `.swiftinterface`, pattern fidelity) clean apart from 2 minor findings (both fixed: added `NebulaCloudKitSync.sync()` default extension, fixed a doc-comment indent). **Per-platform cross-compile confirmed**: `swift build --triple arm64-apple-tvos26.0` / `watchos26.0` / `xros26.0` all green (host macOS + iOS already green) — all 5 platforms compile the CloudKit path ungated.
 
 ## Root-doc follow-up (owner action)
 
