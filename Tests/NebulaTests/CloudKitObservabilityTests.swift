@@ -100,6 +100,68 @@ struct NebulaCloudKitSyncPortTests {
     }
 }
 
+@Suite("NebulaCloudKitPreferences")
+struct NebulaCloudKitPreferencesTests {
+
+    /// Polls `predicate` until it holds or a bounded retry budget is exhausted
+    /// (the conformer flushes via a fire-and-forget `Task.detached`, so the sink
+    /// is invoked off the calling thread).
+    private func awaitUntil(_ expected: Int, _ read: () -> Int) async {
+        for _ in 0..<200 {
+            if read() == expected { return }
+            try? await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(read() == expected, "await timed out")
+    }
+
+    @Test func cacheRoundTripIsSynchronous() {
+        let prefs = NebulaCloudKitPreferences(sink: { _ in })   // no-op sink
+        #expect(prefs.data(forKey: "x") == nil)
+        prefs.setData(Data([1, 2, 3]), forKey: "x")
+        #expect(prefs.data(forKey: "x") == Data([1, 2, 3]))
+        prefs.remove(forKey: "x")
+        #expect(prefs.data(forKey: "x") == nil)
+    }
+
+    @Test func setDataNilRemovesAndEmitsRemoveChange() async {
+        let recorded = Mutex<[NebulaCloudKitKVChange]>([])
+        let prefs = NebulaCloudKitPreferences(sink: { change in recorded.withLock { $0.append(change) } })
+        prefs.setData(Data([9]), forKey: "k")
+        prefs.setData(nil, forKey: "k")
+        await awaitUntil(2) { recorded.withLock { $0.count } }
+        let changes = recorded.withLock { $0 }
+        #expect(changes.count == 2)
+        #expect(changes[0] == .init(key: "k", op: .set(Data([9]))))
+        #expect(changes[1] == .init(key: "k", op: .remove))
+        #expect(prefs.data(forKey: "k") == nil)
+    }
+
+    @Test func codableBridgeRoundTripsThroughCache() throws {
+        struct Settings: Codable, Equatable { let theme: String; let volume: Int }
+        let prefs = NebulaCloudKitPreferences(sink: { _ in })
+        try prefs.setValue(Settings(theme: "dark", volume: 7), forKey: "settings")
+        let got: Settings? = try prefs.value(Settings.self, forKey: "settings")
+        #expect(got == Settings(theme: "dark", volume: 7))
+        try prefs.setValue(Settings?.none, forKey: "settings")
+        #expect((try prefs.value(Settings.self, forKey: "settings")) == nil)
+    }
+
+    @Test func disabledConfigUsesNoOpDefaultSinkButCacheStillWorks() {
+        // Disabled default config → defaultSink is a no-op (no CloudKit hit in
+        // the test process). The cache is the synchronous source of truth.
+        let prefs = NebulaCloudKitConfiguration.default  // isEnabled == false
+        let store = NebulaCloudKitPreferences(prefs)
+        store.setData(Data([0xAB]), forKey: "k")
+        #expect(store.data(forKey: "k") == Data([0xAB]))
+    }
+
+    @Test func kvChangeEquality() {
+        #expect(NebulaCloudKitKVChange(key: "k", op: .set(Data([1]))) == .init(key: "k", op: .set(Data([1]))))
+        #expect(NebulaCloudKitKVChange(key: "k", op: .set(Data([1]))) != .init(key: "k", op: .remove))
+        #expect(NebulaCloudKitKVChange(key: "a", op: .remove) != .init(key: "b", op: .remove))
+    }
+}
+
 @Suite("NebulaPerformanceSink")
 struct NebulaPerformanceSinkTests {
     @Test func defaultMappingRoutesTimingIntoMetrics() {

@@ -110,3 +110,7 @@ not stored on the conformer, so their preconcurrency Sendability never reaches a
 - ``NebulaCloudKitConfiguration``
 - ``NebulaCloudKitEnvironment``
 - ``NebulaCloudKitConfig``
+
+### CloudKit preferences (N19d)
+- ``NebulaCloudKitPreferences``
+- ``NebulaCloudKitKVChange``
