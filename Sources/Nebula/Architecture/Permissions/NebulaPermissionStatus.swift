@@ -73,9 +73,12 @@ public enum NebulaPermissionStatus: Sendable, Equatable, Hashable, CaseIterable,
     ///
     /// `.notDetermined` / `.denied` / `.authorized` / `.provisional` map 1:1.
     /// `.ephemeral` is iOS-only (App Clips) and bridges on iOS only. Returns
-    /// `nil` for any future `UNAuthorizationStatus` case that has no Nebula
+    /// `nil` for any other `UNAuthorizationStatus` case that has no Nebula
     /// equivalent (UN has no `restricted` / `authorizedAlways` /
-    /// `authorizedWhenInUse`).
+    /// `authorizedWhenInUse`; and SDK-added cases on any platform — e.g. a new
+    /// visionOS case — fall through to `default`). A plain `default` (not
+    /// `@unknown default`) keeps the switch exhaustive on every platform even
+    /// when the C enum is imported frozen and gains a case under a newer SDK.
     public init?(_ status: UNAuthorizationStatus) {
         switch status {
         case .notDetermined: self = .notDetermined
@@ -85,7 +88,7 @@ public enum NebulaPermissionStatus: Sendable, Equatable, Hashable, CaseIterable,
         #if os(iOS)
         case .ephemeral:    self = .ephemeral
         #endif
-        @unknown default:   return nil
+        default:            return nil
         }
     }
 }

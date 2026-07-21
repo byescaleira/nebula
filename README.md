@@ -1,5 +1,11 @@
 # Nebula
 
+[![CI](https://github.com/byescaleira/nebula/actions/workflows/ci.yml/badge.svg)](https://github.com/byescaleira/nebula/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/byescaleira/nebula/branch/main/graph/badge.svg)](https://codecov.io/gh/byescaleira/nebula)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Swift 6.4](https://img.shields.io/badge/Swift-6.4-orange.svg)](https://www.swift.org/)
+[![Release](https://img.shields.io/github/v/tag/byescaleira/nebula?label=release)](https://github.com/byescaleira/nebula/tags)
+
 > A clean-room Swift foundation/architecture library for iOS, macOS, tvOS, watchOS, and visionOS 26.
 
 ## Overview

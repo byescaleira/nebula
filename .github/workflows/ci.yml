@@ -118,10 +118,50 @@ jobs:
       - name: swift build (debug, host)
         run: swift build
 
-      # Run the Swift Testing suite (379 tests). Default execution is fine;
-      # if flakes appear, drop `--parallel` by passing --no-parallel.
+      # Run the Swift Testing suite with coverage instrumentation enabled.
+      # `--enable-code-coverage` emits raw profdata/profraw consumed by the
+      # coverage-report step below. Default execution is fine; if flakes
+      # appear, drop `--parallel` by passing --no-parallel.
       - name: swift test
-        run: swift test
+        run: swift test --enable-code-coverage
+
+      # `swift test --enable-code-coverage` emits raw profdata/profraw.
+      # codecov-action@v5 does NOT auto-convert profdata — it needs a report
+      # format. Export lcov from the test binary + profdata, filtering
+      # generated build-directory sources so coverage reflects real sources
+      # only. The build layout differs by toolchain: Xcode 26 / Swift 6.3
+      # uses the legacy `.build/<triple>/debug/` layout with a
+      # `*PackageTests` executable; Xcode 27 / Swift 6.4 (the macos-26 runner
+      # default) uses the new `.build/out/Products/Debug/` layout with an
+      # `.xctest` bundle. Discover both dynamically instead of hard-coding
+      # either path.
+      - name: Generate coverage report
+        run: |
+          set -euo pipefail
+          echo "== profdata candidates =="
+          find .build -name '*.profdata' -type f
+          echo "== test binary candidates =="
+          find .build -type f -path '*.xctest/Contents/MacOS/*' ! -path '*.dSYM*' | head -n 20
+          PROF=$(find .build -name '*.profdata' -type f | head -n 1)
+          BIN=$(find .build -type f -path '*.xctest/Contents/MacOS/*' ! -path '*.dSYM*' | head -n 1)
+          if [ -z "$PROF" ] || [ -z "$BIN" ]; then
+            echo "::warning::profdata or test binary not found — skipping coverage report"
+            exit 0
+          fi
+          echo "profdata: $PROF"
+          echo "binary:   $BIN"
+          xcrun llvm-cov export -format="lcov" \
+            -ignore-filename-regex="\.build|Intermediates|DerivedSources|test_entry_point|resource_bundle_accessor|GeneratedStringSymbols" \
+            "$BIN" -instr-profile="$PROF" > coverage.lcov
+          SF=$(grep -c '^SF:' coverage.lcov)
+          echo "lcov source files: $SF"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.lcov
+          fail_ci_if_error: false   # coverage is observability, not a build gate
 
       # Release configuration — catches optimizer-only issues and confirms
       # the library ships clean under -O.

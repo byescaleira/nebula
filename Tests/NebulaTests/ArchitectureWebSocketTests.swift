@@ -257,14 +257,19 @@ private final class URLAuthenticationChallengeSenderStub: NSObject, URLAuthentic
             #expect(server.port > 0)
 
             // Wait for the client's `onOpen` before sending (the handshake is
-            // async; a fixed sleep races it). A mutex-stored continuation raced
-            // against a 5s timeout so the test fails (not hangs) if it never
-            // opens.
-            let opened = Mutex<CheckedContinuation<Void, Never>?>(nil)
+            // async; a fixed sleep races it). The open-signal continuation lives
+            // in a `SendableBox` (a `final class` + `Mutex` — the codebase's
+            // shared-Sendable-state pattern) so the `onOpen` escaping closure and
+            // the task-group `sending` closures capture a clean Sendable
+            // reference, not a `~Copyable` `Mutex` borrow (which would tie their
+            // regions together and trip `#SendingClosureRisksDataRace` under
+            // strict `sending` isolation). A 5s timeout resumes the continuation
+            // so the test fails (not hangs) if it never opens.
+            let opened = SendableBox<CheckedContinuation<Void, Never>?>(nil)
             let pinning = NebulaSSLPinning(hostPins: [], failClosedForUnknownHosts: false)
             let pinned = NebulaWebSocketSession.pinned(
                 by: pinning,
-                onOpen: { _ in opened.withLock { cont in cont?.resume(); cont = nil } },
+                onOpen: { _ in opened.mutate { cont in cont?.resume(); cont = nil } },
                 onClose: { _, _ in })
             let url = URL(string: "ws://127.0.0.1:\(server.port)")!
             let ws = NebulaWebSocketSession.open(url: url, using: pinned)
@@ -272,12 +277,12 @@ private final class URLAuthenticationChallengeSenderStub: NSObject, URLAuthentic
             try await withThrowingTaskGroup(of: Void.self) { group in
                 group.addTask {
                     await withCheckedContinuation { (c: CheckedContinuation<Void, Never>) in
-                        opened.withLock { $0 = c }
+                        opened.mutate { $0 = c }
                     }
                 }
                 group.addTask {
                     try await Task.sleep(nanoseconds: 5_000_000_000)
-                    opened.withLock { cont in cont?.resume(); cont = nil }
+                    opened.mutate { cont in cont?.resume(); cont = nil }
                     throw URLError(.timedOut)
                 }
                 try await group.next()
