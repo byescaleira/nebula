@@ -1,4 +1,0 @@
-module Meridian {
-header "Meridian-Swift.h"
-export *
-}
