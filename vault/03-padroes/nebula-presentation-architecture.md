@@ -2,8 +2,9 @@
 tags: [padroes, architecture, presentation, swiftui, mvvm, coordinator, tdd, nebula]
 aliases: [Nebula presentation architecture, NebulaUI architecture, presentation layer,MVVM Nebula, Coordinator Nebula]
 related: [[nebula-clean-architecture-toolkit]], [[nebula-presentation-target-split]], [[nebula-usecase]], [[nebula-repository]], [[nebula-registry-di]], [[nebula-swift6-concurrency]], [[presentation-architecture-risks]], [[presentation-architecture-open-questions]], [[nebula-test-doubles]]
-status: researched
+status: shipped
 researched: "2026-07-19"
+shipped: "2026-07-22 (Wave N20 — Nebula 0.18.0)"
 ---
 
 # Nebula Presentation Architecture (2026 research)
@@ -72,3 +73,14 @@ The **most recent + scalable Router pattern in 2026** is the combination: (1) ty
 ## Decision status
 
 **Researched, not yet decided.** The architecture pattern (MVVM `@Observable` + native typed-`[Route]` Router, zero deps, **no Coordinator tree** — owner preference) is a strong, binding-rule-compliant recommendation. The **target split** (option d new sibling package vs. option a+e holding pattern) is the open decision the owner must make — framed in [[presentation-architecture-open-questions]]. Implementation waves will follow the approved plan pattern (H1→H4 with build gates) once the target decision lands.
+
+## Wave N20 — shipped (the per-route-style + container layer, Nebula 0.18.0)
+
+**Target decision landed: option (d)** — Meridian is the SwiftUI sibling package (`Meridian/`, `path: "../"`, `import Nebula`), so `import Meridian` from Nebula is a hard compile error (the Clean Architecture dependency rule is compiler-enforced across packages). Waves I/II shipped the Foundation-only model + port (`NebulaRoute`/`NebulaNavigationStack`/`NebulaRouter`/`NebulaSpyRouter`/`NebulaViewModel`) and the Meridian `@Observable Router` + `MeridianNavigationStack`. **Wave N20 (Nebula 0.18.0, 2026-07-22) closes the two gaps the owner named** — the router only had `push`, and only `NavigationStack` shipped:
+
+- **Per-route presentation style** — `NebulaPresentationStyle` (`.push`/`.sheet`/`.fullScreenCover`, `isModal`) declared on an additive `NebulaRoute.presentationStyle` requirement with a `.push` default (existing conformers auto-conform — non-breaking). `present(_:)` dispatches by the declared style; `present(_:as:)` overrides at the call site (the "present this `.push` route as a sheet *here*" escape hatch); `dismiss()` clears an active modal, else pops one — never both. The route stays the single source of "how I'm presented."
+- **The navigation-as-data modal model** — `NebulaPresentation<Route>` owns the typed `[Route]` push path **and** a single modal slot (`modal` + `modalStyle`). Push-path ops delegate to the `NebulaNavigationStack` statics; present/dismiss live in `static` `inout`-component helpers — single source of truth (the Meridian `Router` and the pure-Swift instance both delegate). One modal at a time matches SwiftUI.
+- **The richer port** — `NebulaPresentationRouter<Route>: NebulaRouter` adds async `present`/`present(_:as:)`/`dismiss`; existing `NebulaRouter` conformers are untouched. The spy conforms; the Meridian `Router` conforms.
+- **The modern container trio** (all in Meridian) — `MeridianNavigationStack` gains `.sheet(isPresented:)`/`.fullScreenCover(isPresented:)` gated bindings driven by the single modal slot (NOT `.sheet(item:)` — `Route` need not be `Identifiable`; `fullScreenCover` gated `#if !os(macOS)` with a `.sheet` fallback on macOS since the API is unavailable there); new `MeridianNavigationSplitView` (sidebar + `MeridianNavigationStack` detail — `NavigationSplitView` subsumes the deprecated `NavigationView`); new `MeridianTabView` (`TabView` with `Tab(value:)`, `Tab: CaseIterable & Hashable & Sendable`, one `Router` per tab — never share a path across tabs).
+
+**Binding held**: Nebula stays Foundation-only (zero `import SwiftUI`/`UIKit` — grep-verified); `Sendable` derived throughout (no `@unchecked` on any Nebula value type; the spy keeps `final class` + `let Mutex`); `dependencies: []` pristine (Meridian lists only the local Nebula sibling); no `@available` gate (all new APIs below the `.v26` floor). Additive, non-breaking — `NebulaRouter`/`NebulaNavigationStack`/`MeridianNavigationStack(router:root:destination:)` existing API preserved. 985 Nebula tests / 198 suites + 20 Meridian tests / 3 suites green; zero concurrency warnings; release clean; all 5 platforms compile the new Nebula types ungated; DocC `BUILD DOCUMENTATION SUCCEEDED`. ADR in `02-decisoes/adr-presentation-styles.md`; root-doc governance in `DECISIONS.md`/`CHANGELOG.md`/`ROADMAP.md`/`ARCHITECTURE.md`/`ArchitecturePresentation.md`. The earlier "Wave III sheet" hint (the per-feature `Optional<Destination>` enum → `sheet(item:)`) is now joined by the **route-driven** modal: a route declared `.sheet`/`.fullScreenCover` presents modally through the same `destination` resolver — the two patterns coexist (per-feature enum for alerts/non-route modals; per-route style for navigation-adjacent sheets/covers).

@@ -35,7 +35,13 @@ import Synchronization
 /// #expect(spy.intents() == [.push(.detail(id: id)), .pop(1)])
 /// #expect(spy.callCount == 2)
 /// ```
-public final class NebulaSpyRouter<Route: NebulaRoute>: NebulaRouter<Route>, Sendable {
+///
+/// Conforms to ``NebulaPresentationRouter`` (Wave N20): the modal intents
+/// `present(_:)`/`present(_:as:)`/`dismiss()` record as `.present(_)`/
+/// `.presentAs(_,_:)`/`.dismiss`. Adopting the richer port is additive — a
+/// push-only consumer still sees only `.push`/`.pop`/`.popToRoot`/
+/// `.replaceStack`.
+public final class NebulaSpyRouter<Route: NebulaRoute>: NebulaPresentationRouter<Route>, Sendable {
 
     /// A recorded navigation intent — a value, so intents assert with `==`.
     public enum Intent: Sendable, Equatable {
@@ -43,6 +49,9 @@ public final class NebulaSpyRouter<Route: NebulaRoute>: NebulaRouter<Route>, Sen
         case pop(Int)
         case popToRoot
         case replaceStack([Route])
+        case present(Route)
+        case presentAs(Route, NebulaPresentationStyle)
+        case dismiss
     }
 
     private let invocations = Mutex<[Intent]>([])
@@ -78,5 +87,21 @@ public final class NebulaSpyRouter<Route: NebulaRoute>: NebulaRouter<Route>, Sen
 
     public func replaceStack(with routes: [Route]) {
         invocations.withLock { $0.append(.replaceStack(routes)) }
+    }
+
+    // MARK: NebulaPresentationRouter<Route> — records modal intents (Wave N20).
+    // The spy records; it does not mutate a real stack/modal — mirrors the
+    // push recording. Sync impls witness the async requirements.
+
+    public func present(_ route: Route) {
+        invocations.withLock { $0.append(.present(route)) }
+    }
+
+    public func present(_ route: Route, as style: NebulaPresentationStyle) {
+        invocations.withLock { $0.append(.presentAs(route, style)) }
+    }
+
+    public func dismiss() {
+        invocations.withLock { $0.append(.dismiss) }
     }
 }
