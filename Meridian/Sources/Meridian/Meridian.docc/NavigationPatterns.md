@@ -1,42 +1,55 @@
 # Navigation Patterns
 
-The two patterns `Router` + `MeridianNavigationStack` enable — deep links as data, and type-driven modal destinations — and how they compose.
+The patterns `Router` + `MeridianNavigationStack` enable — external navigation entries conforming to the router, and type-driven modal destinations — and how they compose.
 
 ## Overview
 
-### Deep link as data
+### External navigation entries conforming to the router (Wave N21)
 
-A deep link is a pure function `URL -> [Route]`. Parse the URL into a typed `[Route]` stack, then hand it to the router's `replaceStack(with:)`. No simulator needed to test it — assert the array.
+Every external navigation entry — deep links (`myapp://`), universal links (`https://`), Spotlight/Handoff/Siri, Home-screen shortcuts, notification taps, in-app "go here" — is normalized to a `NebulaLink`, resolved by an app-provided `NebulaLinkParser<Route>` port into a `NebulaLinkDestination<Route>` (`.unhandled` / `.present` / `.pushStack` / `.pushStackAndPresent` / `.dismiss`), and applied to the same `NebulaPresentationRouter` the viewmodels use. A `NebulaLinkRouter<Router>` is the one-line glue; the destination→intents translation lives once in the additive `NebulaPresentationRouter.apply(_:)` default extension (dismiss-first for stack-rebuilds to clear any stale modal). This supersedes the ad-hoc `URL → [Route]` function.
 
 ```swift
+import Nebula
+import Meridian
+
 enum AppRoute: NebulaRoute {
     case root
     case detail(id: UUID)
     case settings
+    case login             // .fullScreenCover
 }
 
-enum DeepLink {
-    static func parse(_ url: URL) -> [AppRoute] {
-        guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return [.root]
-        }
+struct AppLinkParser: NebulaLinkParser {
+    typealias Route = AppRoute
+    func resolve(_ link: NebulaLink) -> NebulaLinkDestination<AppRoute> {
+        guard let url = link.url,
+              let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        else { return .unhandled }
         var routes: [AppRoute] = [.root]
         for segment in comps.path.split(separator: "/").map(String.init) {
             switch segment {
             case "settings": routes.append(.settings)
+            case "login":    return .present(.login)
             default:
                 if let id = UUID(uuidString: segment) { routes.append(.detail(id: id)) }
             }
         }
-        return routes
+        return routes.count > 1 ? .pushStack(routes) : .unhandled
     }
 }
 
-// Wire it up — the async port is the cross-actor bridge to the @MainActor router.
-.onOpenURL { url in
-    Task { router.replaceStack(with: DeepLink.parse(url)) }
-}
+// One router, one parser — every external entry conforms to it.
+let linkRouter = NebulaLinkRouter(router: router, parser: AppLinkParser())
+
+// Deep links + universal links via .onOpenURL; Spotlight/Handoff/Siri via .onContinueUserActivity.
+ContentView()
+    .meridianDeepLinks(linkRouter)
+    .meridianUserActivity("com.example.item", linkRouter)
 ```
+
+`NebulaLink.init(url:)` infers `.universalLink` for `http`/`https`, else `.urlScheme`. The URL is `Sendable`, so `.meridianDeepLinks` captures it cleanly into the `Task`; `.meridianUserActivity` builds the `NebulaLink` **inside** the `.onContinueUserActivity` perform closure (`NSUserActivity` is not `Sendable`) and captures only the Sendable link across the `Task`. No simulator needed to test the parser — assert the `NebulaLinkDestination` value.
+
+Shortcuts (`UIApplicationShortcutItem`) and notification taps (`UNNotificationResponse`) have no SwiftUI View modifier / pull UIKit → build a `NebulaLink` in your delegate and call `linkRouter.open(_:)` (keeps Meridian UIKit-free, valid on all 5 platforms). See the Nebula article <doc:ArchitectureDeepLinks> for the six sources, the SwiftUI-native vs app-constructed split, and the atomicity note.
 
 State restoration is the same idea via `Codable`: `Route` is `NebulaRoute` (`Codable`), so `router.path` encodes/decodes directly.
 
@@ -85,3 +98,5 @@ One `Router`/`MeridianNavigationStack` per tab — never share a path across tab
 
 - ``Router``
 - ``MeridianNavigationStack``
+- ``meridianDeepLinks(_:)``
+- ``meridianUserActivity(_:_:)``

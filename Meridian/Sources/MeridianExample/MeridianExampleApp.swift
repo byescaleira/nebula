@@ -2,8 +2,9 @@
 //  MeridianExampleApp.swift
 //  MeridianExample
 //
-//  Wave N20 — a runnable demonstration of the full data-driven Router pattern
-//  with the modern container trio + per-route presentation styles:
+//  Wave N20/N21 — a runnable demonstration of the full data-driven Router
+//  pattern with the modern container trio, per-route presentation styles, and
+//  **external navigation entries conforming to the router**:
 //  - `MeridianTabView` root (one `Router` per tab — never share a path),
 //  - `MeridianNavigationSplitView` in the items tab (sidebar + detail stack),
 //  - `MeridianNavigationStack` in the settings tab,
@@ -11,9 +12,15 @@
 //    `.fullScreenCover` (on macOS the cover falls back to a sheet — the
 //    adapter gates `fullScreenCover` to non-macOS),
 //  - `present(_:)` dispatches by declared style; `present(_:as:)` overrides,
-//  - a deep-link handler (`onOpenURL` → parse → `replaceStack`).
+//  - **Wave N21** — deep links + universal links (`.meridianDeepLinks` via
+//    `.onOpenURL`) and Spotlight/Handoff/Siri (`.meridianUserActivity` via
+//    `.onContinueUserActivity`) are funneled through an `AppLinkParser:
+//    NebulaLinkParser` → `NebulaLinkRouter` → the bound `Router`. An in-app
+//    button opens a URL via `@Environment(\.openURL)` to exercise the path;
+//    shortcuts/notifications would build a `NebulaLink` in a delegate (not
+//    shown — Meridian stays UIKit-free).
 //  Living docs for the presentation architecture; not a shipped product.
-//  Compiling it is the Wave N20 gate; `swift run MeridianExample` launches the
+//  Compiling it is the Wave N21 gate; `swift run MeridianExample` launches the
 //  macOS app.
 
 import SwiftUI
@@ -47,26 +54,39 @@ enum AppTab: CaseIterable, Hashable, Sendable {
     case settings
 }
 
-// MARK: - Deep link (parse URL → [AppRoute]) — deep-link-as-data
+// MARK: - External navigation entries (NebulaLinkParser — link → destination)
+//
+// Wave N21: every external entry — deep links (`nebula://`), universal links
+// (`https://`), Spotlight/Handoff/Siri — is normalized to a `NebulaLink` and
+// resolved here into a `NebulaLinkDestination`, then `apply`-ed to the router.
+// Replaces the Wave III ad-hoc `URL → [Route]` function with the proper port.
 
-enum DeepLink {
-    // `nebula://<host>/detail/<uuid>` / `nebula://<host>/settings` → a `[AppRoute]`.
-    static func parse(_ url: URL) -> [AppRoute] {
-        guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return [.root]
-        }
+struct AppLinkParser: NebulaLinkParser {
+    typealias Route = AppRoute
+
+    func resolve(_ link: NebulaLink) -> NebulaLinkDestination<AppRoute> {
+        guard let url = link.url,
+              let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        else { return .unhandled }
+
         var routes: [AppRoute] = [.root]
         for segment in comps.path.split(separator: "/").map(String.init) {
             switch segment {
             case "settings":
                 routes.append(.settings)
+            case "login":
+                // Present the full-screen cover directly (the route's declared
+                // style is `.fullScreenCover`).
+                return .present(.login)
             default:
                 if let id = UUID(uuidString: segment) {
                     routes.append(.detail(id: id))
                 }
             }
         }
-        return routes
+        // Only recognized segments beyond root rebuild the stack; an
+        // unrecognized URL is `.unhandled` (the router is left untouched).
+        return routes.count > 1 ? .pushStack(routes) : .unhandled
     }
 }
 
@@ -100,6 +120,14 @@ struct MeridianExampleApp: App {
     @State private var itemsRouter = Router<AppRoute>()
     @State private var settingsRouter = Router<AppRoute>()
 
+    /// Deep links + universal links (`nebula://`, `https://`) and
+    /// Spotlight/Handoff/Siri, funneled through the same `NebulaLinkRouter` →
+    /// the items `Router` (Wave N21). One `NebulaLink` normalization, one
+    /// `AppLinkParser`, one router — every external entry conforms to it.
+    private var itemsLinkRouter: NebulaLinkRouter<Router<AppRoute>> {
+        NebulaLinkRouter(router: itemsRouter, parser: AppLinkParser())
+    }
+
     var body: some Scene {
         WindowGroup {
             MeridianTabView(selection: AppTab.items) { tab in
@@ -108,10 +136,8 @@ struct MeridianExampleApp: App {
                 case .settings: settingsTab
                 }
             }
-            .onOpenURL { url in
-                // Deep link as data: parse → replaceStack on the items router.
-                Task { itemsRouter.replaceStack(with: DeepLink.parse(url)) }
-            }
+            .meridianDeepLinks(itemsLinkRouter)
+            .meridianUserActivity("com.byescaleira.nebula.item", itemsLinkRouter)
         }
     }
 
@@ -158,6 +184,7 @@ private struct SidebarView: View {
 
 private struct ItemsRootView: View {
     @MainActor let vm: ItemListViewModel
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         VStack {
@@ -165,6 +192,14 @@ private struct ItemsRootView: View {
             Button("Open detail") { vm.openDetail(UUID()) }
             Button("Share (sheet)") { vm.share(UUID()) }
             Button("Login (cover)") { vm.login() }
+            // Exercises the deep-link path from within the app: opens a URL that
+            // `.meridianDeepLinks` funnels through `AppLinkParser` → the router.
+            Button("Open via deep link (settings)") {
+                openURL(URL(string: "nebula://app/settings")!)
+            }
+            Button("Open via deep link (login)") {
+                openURL(URL(string: "nebula://app/login")!)
+            }
         }
         .navigationTitle("Items")
     }
