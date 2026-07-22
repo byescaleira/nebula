@@ -46,4 +46,29 @@ import Foundation
 /// and the navigation-intent port is ``NebulaRouter``; both live in Nebula.
 /// The `@Observable` concrete `Router` lives in the sibling Meridian package
 /// (SwiftUI-bearing); Nebula stays Foundation-only.
-public protocol NebulaRoute: Hashable, Sendable, Codable {}
+/// A route also declares **how it is presented** via ``presentationStyle`` —
+/// `.push` (the default), `.sheet`, or `.fullScreenCover` (see
+/// ``NebulaPresentationStyle``). The default is additive (`.push`), so
+/// existing conformers keep working; an app overrides per case to declare a
+/// modal route. The richer model + port that carry the modal slot are
+/// ``NebulaPresentation`` and ``NebulaPresentationRouter`` (Wave N20).
+public protocol NebulaRoute: Hashable, Sendable, Codable {
+
+    /// How this route is presented — `.push` (the default), `.sheet`, or
+    /// `.fullScreenCover`.
+    ///
+    /// The router dispatches by the route's declared style:
+    /// ``NebulaPresentationRouter/present(_:)`` pushes a `.push` route and
+    /// modally presents a `.sheet`/`.fullScreenCover` route. Override at the
+    /// call site with
+    /// ``NebulaPresentationRouter/present(_:as:)``. The default is `.push`, so
+    /// existing conformers auto-conform — adopting the modal styles is opt-in.
+    var presentationStyle: NebulaPresentationStyle { get }
+}
+
+extension NebulaRoute {
+
+    /// The default presentation style — `.push` (push onto the stack). Override
+    /// per case to declare a modal route (`.sheet`/`.fullScreenCover`).
+    public var presentationStyle: NebulaPresentationStyle { .push }
+}

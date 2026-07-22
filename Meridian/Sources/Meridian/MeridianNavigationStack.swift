@@ -36,10 +36,17 @@ import Nebula
 /// ```
 ///
 /// One `MeridianNavigationStack` per tab — never share a `Router`/path across
-/// tabs (a SwiftUI navigation footgun). For modals/sheets/alerts, model each
-/// feature's destination as a single `Optional<Destination>` enum driving
-/// `sheet(item:)`/`alert(item:)` ("impossible states unrepresentable" — the
-/// type-driven enum-destination pattern, Wave III).
+/// tabs (a SwiftUI navigation footgun).
+///
+/// Modals (Wave N20): the same `destination` resolver drives `.sheet`/
+/// `.fullScreenCover` from the router's single modal slot. A route's declared
+/// ``NebulaRoute/presentationStyle`` (or a `present(_:as:)` override) decides
+/// whether `router.present(route)` pushes onto `path` or fills `presented`/
+/// `presentedStyle` — and this view presents the modal via the matching
+/// `isPresented` binding. Use `.sheet(isPresented:)`/`.fullScreenCover(
+/// isPresented:)` (not `.sheet(item:)`) so `Route` need not be `Identifiable`.
+/// Only one modal is active at a time (single slot); setting the binding back
+/// to `false` calls `router.dismiss()`.
 public struct MeridianNavigationStack<Route: NebulaRoute, Root: View, Destination: View>: View {
 
     @MainActor private let router: Router<Route>
@@ -47,7 +54,8 @@ public struct MeridianNavigationStack<Route: NebulaRoute, Root: View, Destinatio
     @ViewBuilder private let destination: (Route) -> Destination
 
     /// Creates a stack bound to `router`, rendering `root` at the root and
-    /// `destination(route)` for each pushed `Route`.
+    /// `destination(route)` for each pushed `Route` and each presented modal
+    /// (`sheet`/`fullScreenCover`).
     public init(
         router: Router<Route>,
         @ViewBuilder root: @escaping () -> Root,
@@ -66,5 +74,34 @@ public struct MeridianNavigationStack<Route: NebulaRoute, Root: View, Destinatio
                     destination(route)
                 }
         }
+        .sheet(isPresented: Binding(
+            get: {
+                guard router.presented != nil else { return false }
+                #if os(macOS)
+                // `fullScreenCover` is unavailable on macOS; a `.fullScreenCover`
+                // route falls back to a sheet there (graceful — macOS has no
+                // full-screen cover surface).
+                return router.presentedStyle == .sheet
+                    || router.presentedStyle == .fullScreenCover
+                #else
+                return router.presentedStyle == .sheet
+                #endif
+            },
+            set: { if !$0 { router.dismiss() } }
+        )) {
+            if let route = router.presented {
+                destination(route)
+            }
+        }
+        #if !os(macOS)
+        .fullScreenCover(isPresented: Binding(
+            get: { router.presented != nil && router.presentedStyle == .fullScreenCover },
+            set: { if !$0 { router.dismiss() } }
+        )) {
+            if let route = router.presented {
+                destination(route)
+            }
+        }
+        #endif
     }
 }

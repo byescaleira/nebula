@@ -4,7 +4,7 @@
 /probe_import
 
 # Swift / Xcode
-/.build
+.build
 /Packages
 /*.xcodeproj
 xcuserdata/

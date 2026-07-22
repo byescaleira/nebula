@@ -2,14 +2,19 @@
 //  MeridianExampleApp.swift
 //  MeridianExample
 //
-//  Wave III — a runnable demonstration of the full data-driven Router pattern:
-//  `Router` + a typed `[Route]` (`AppRoute`) + `MeridianNavigationStack` + a
-//  type-driven `Destination` enum driving `sheet(item:)` ("impossible states
-//  unrepresentable" — only one destination active, compiler-enforced) + a
-//  deep-link handler (`onOpenURL` → parse → `replaceStack`). Living docs for the
-//  presentation architecture; not a shipped product. Compiling it is the Wave
-//  III gate; `swift run MeridianExample` launches the macOS app.
-//
+//  Wave N20 — a runnable demonstration of the full data-driven Router pattern
+//  with the modern container trio + per-route presentation styles:
+//  - `MeridianTabView` root (one `Router` per tab — never share a path),
+//  - `MeridianNavigationSplitView` in the items tab (sidebar + detail stack),
+//  - `MeridianNavigationStack` in the settings tab,
+//  - per-route `presentationStyle`: `.share(id:)` → `.sheet`, `.login` →
+//    `.fullScreenCover` (on macOS the cover falls back to a sheet — the
+//    adapter gates `fullScreenCover` to non-macOS),
+//  - `present(_:)` dispatches by declared style; `present(_:as:)` overrides,
+//  - a deep-link handler (`onOpenURL` → parse → `replaceStack`).
+//  Living docs for the presentation architecture; not a shipped product.
+//  Compiling it is the Wave N20 gate; `swift run MeridianExample` launches the
+//  macOS app.
 
 import SwiftUI
 import Nebula
@@ -20,6 +25,25 @@ import Meridian
 enum AppRoute: NebulaRoute {
     case root
     case detail(id: UUID)
+    case settings
+    case share(id: UUID)   // sheet
+    case login             // full-screen cover
+
+    /// Per-route presentation style — the Wave N20 dispatch key. `.share` is a
+    /// sheet; `.login` is a full-screen cover; everything else pushes.
+    var presentationStyle: NebulaPresentationStyle {
+        switch self {
+        case .share:      return .sheet
+        case .login:      return .fullScreenCover
+        default:          return .push
+        }
+    }
+}
+
+// MARK: - Tabs (one Router per tab — never share a path across tabs)
+
+enum AppTab: CaseIterable, Hashable, Sendable {
+    case items
     case settings
 }
 
@@ -46,85 +70,143 @@ enum DeepLink {
     }
 }
 
-// MARK: - Type-driven destinations (modals — one active, compiler-enforced)
-
-// A single optional enum drives `sheet(item:)` — only one destination is active
-// at a time, so "showing the edit sheet AND the delete alert" is unrepresentable.
-// `Identifiable` is hand-rolled (no `@CasePathable` macro — `dependencies: []`).
-enum Destination: Identifiable {
-    case editItem(UUID)
-    case confirmDelete(UUID)
-
-    var id: String {
-        switch self {
-        case .editItem(let id):       "edit-\(id.uuidString)"
-        case .confirmDelete(let id):  "delete-\(id.uuidString)"
-        }
-    }
-}
-
 // MARK: - A viewmodel (@MainActor @Observable, NebulaViewModel marker)
 
 @MainActor @Observable
 final class ItemListViewModel: NebulaViewModel {
-    var destination: Destination?
+    let router: Router<AppRoute>
 
-    func edit(_ id: UUID) { destination = .editItem(id) }
-    func confirmDelete(_ id: UUID) { destination = .confirmDelete(id) }
-    func dismiss() { destination = nil }
+    init(router: Router<AppRoute>) { self.router = router }
+
+    func openDetail(_ id: UUID) { router.push(.detail(id: id)) }
+
+    // Dispatch by the route's declared style → .share presents as a sheet.
+    func share(_ id: UUID) { router.present(.share(id: id)) }
+
+    // Call-site override: present .login (declared .fullScreenCover) — shown
+    // here explicitly for the demo. `present(_:as:)` overrides the declared
+    // style (e.g. `router.present(.settings, as: .sheet)` would sheet a route
+    // that otherwise pushes).
+    func login() { router.present(.login, as: .fullScreenCover) }
+
+    func dismiss() { router.dismiss() }
 }
 
 // MARK: - App
 
 @main
 struct MeridianExampleApp: App {
-    @State private var router = Router<AppRoute>()
+    // One Router per tab — never share a path across tabs.
+    @State private var itemsRouter = Router<AppRoute>()
+    @State private var settingsRouter = Router<AppRoute>()
 
     var body: some Scene {
         WindowGroup {
-            MeridianNavigationStack(router: router) {
-                RootView()
-            } destination: { route in
-                switch route {
-                case .root:           RootView()
-                case .detail(let id): DetailView(id: id)
-                case .settings:       SettingsView()
+            MeridianTabView(selection: AppTab.items) { tab in
+                switch tab {
+                case .items:    itemsTab
+                case .settings: settingsTab
                 }
             }
             .onOpenURL { url in
-                // Deep link as data: parse → replaceStack. The plain Task
-                // inherits the @MainActor isolation of the SwiftUI action, so the
-                // concrete router's synchronous replaceStack is called directly
-                // (the async port's await would be a no-op here; use the async
-                // form when driving the router from a non-MainActor context).
-                Task { router.replaceStack(with: DeepLink.parse(url)) }
+                // Deep link as data: parse → replaceStack on the items router.
+                Task { itemsRouter.replaceStack(with: DeepLink.parse(url)) }
             }
         }
+    }
+
+    /// The items tab — a split container (sidebar + detail stack). Erased to
+    /// `AnyView` so `MeridianTabView`'s `Content` is a single concrete type
+    /// (the `@ViewBuilder` switch of two distinct container view types trips a
+    /// known type-inference fragility in this demo closure — erasure here is
+    /// demo-only, never shipped library API).
+    private var itemsTab: AnyView {
+        AnyView(MeridianNavigationSplitView(sidebar: {
+            SidebarView(router: itemsRouter)
+        }, detailRouter: itemsRouter, detailRoot: {
+            ItemsRootView(vm: ItemListViewModel(router: itemsRouter))
+        }, destination: { route in
+            DestinationView(route: route)
+        }))
+    }
+
+    /// The settings tab — a plain stack (erased to `AnyView`; see `itemsTab`).
+    private var settingsTab: AnyView {
+        AnyView(MeridianNavigationStack(router: settingsRouter) {
+            SettingsRootView()
+        } destination: { route in
+            DestinationView(route: route)
+        })
     }
 }
 
 // MARK: - Views (pure functions of state)
 
-private struct RootView: View {
+private struct SidebarView: View {
+    @MainActor let router: Router<AppRoute>
+
     var body: some View {
-        // In a real app: a list of items with NavigationLink(value: AppRoute.detail(id:))
-        // pushes onto the typed stack. Kept minimal — the pattern is the point.
-        NavigationLink("Settings", value: AppRoute.settings)
-            .navigationTitle("Meridian Example")
+        List {
+            NavigationLink("Settings", value: AppRoute.settings)
+            NavigationLink("Detail", value: AppRoute.detail(id: UUID()))
+        }
+        .navigationTitle("Items")
+        // A route declared .sheet presented from the sidebar.
+        Button("Share") { router.present(.share(id: UUID())) }
     }
 }
 
-private struct DetailView: View {
-    let id: UUID
+private struct ItemsRootView: View {
+    @MainActor let vm: ItemListViewModel
+
     var body: some View {
-        Text("Detail \(id.uuidString.prefix(8))")
-            .navigationTitle("Detail")
+        VStack {
+            Text("Items root")
+            Button("Open detail") { vm.openDetail(UUID()) }
+            Button("Share (sheet)") { vm.share(UUID()) }
+            Button("Login (cover)") { vm.login() }
+        }
+        .navigationTitle("Items")
     }
 }
 
-private struct SettingsView: View {
+private struct SettingsRootView: View {
     var body: some View {
-        Text("Settings")
+        Text("Settings root")
             .navigationTitle("Settings")
+    }
+}
+
+private struct DestinationView: View {
+    let route: AppRoute
+
+    var body: some View {
+        switch route {
+        case .root:
+            Text("Root")
+        case .detail(let id):
+            VStack {
+                Text("Detail \(id.uuidString.prefix(8))")
+                Button("Share this (sheet)") {
+                    // Routed through the bound Router would be ideal; the demo
+                    // resolves the destination view only.
+                }
+            }
+            .navigationTitle("Detail")
+        case .settings:
+            Text("Settings")
+                .navigationTitle("Settings")
+        case .share(let id):
+            VStack {
+                Text("Share sheet for \(id.uuidString.prefix(8))")
+                Button("Done") {
+                    // The sheet/cover binding calls router.dismiss() on swipe;
+                    // a Done button would call the same — omitted for brevity.
+                }
+            }
+            .presentationDetents([.medium])
+        case .login:
+            VStack { Text("Login (full-screen cover)") }
+        }
     }
 }
