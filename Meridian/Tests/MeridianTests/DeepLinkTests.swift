@@ -2,13 +2,15 @@
 //  DeepLinkTests.swift
 //  MeridianTests
 //
-//  Wave III — deep-link-as-data is a pure function `URL -> [Route]`, fully
-//  unit-testable without a simulator. The parser here is self-contained (not
-//  imported from the `MeridianExample` executable target, which isn't
-//  importable) — it mirrors the example's parser and asserts the navigation
-//  stack that `router.replaceStack(with:)` would receive. The async port
-//  (`NebulaRouter`) is the cross-actor bridge that hands the parsed stack to the
-//  on-actor `Router`.
+//  Wave N21 — external navigation entries conforming to the router. The link
+//  router (``NebulaLinkRouter``) drives the Meridian ``Router`` through the
+//  additive ``NebulaPresentationRouter/apply(_:)``: a ``NebulaLink`` is resolved
+//  by a parser into a ``NebulaLinkDestination``, then applied to the on-actor
+//  `Router`. These tests assert the observable `path`/`presented`/
+//  `presentedStyle` mutations on a real `Router` (no simulator) — the
+//  Foundation-only parser/destination/spy is covered in Nebula's
+//  `ArchitectureDeepLinkTests`. The `DestinationTests` suite (below) keeps the
+//  Wave III `sheet(item:)` Identifiable pattern as a standalone reference.
 //
 
 import Testing
@@ -20,63 +22,138 @@ private enum AppRoute: NebulaRoute {
     case root
     case detail(id: UUID)
     case settings
+    case share(id: UUID)   // sheet
+    case login            // full-screen cover
+
+    var presentationStyle: NebulaPresentationStyle {
+        switch self {
+        case .share: return .sheet
+        case .login: return .fullScreenCover
+        default:    return .push
+        }
+    }
 }
 
-private enum DeepLink {
-    static func parse(_ url: URL) -> [AppRoute] {
-        guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return [.root]
-        }
-        var routes: [AppRoute] = [.root]
-        for segment in comps.path.split(separator: "/").map(String.init) {
-            switch segment {
-            case "settings": routes.append(.settings)
-            default:
-                if let id = UUID(uuidString: segment) { routes.append(.detail(id: id)) }
+// MARK: - NebulaLinkRouter over the Meridian Router
+
+@MainActor
+@Suite("NebulaLinkRouter over Meridian Router")
+struct LinkRouterTests {
+
+    @Test(".present pushes a push-style route onto the path")
+    func presentPush() async {
+        let router = Router<AppRoute>()
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.present(.settings)))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.path == [.settings])
+        #expect(router.presented == nil)
+        #expect(router.presentedStyle == nil)
+    }
+
+    @Test(".present of a modal route fills the modal slot")
+    func presentModal() async {
+        let router = Router<AppRoute>()
+        let id = UUID()
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.present(.share(id: id))))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.path == [])
+        #expect(router.presented == .share(id: id))
+        #expect(router.presentedStyle == .sheet)
+    }
+
+    @Test(".present of a full-screen-cover route sets the cover style")
+    func presentCover() async {
+        let router = Router<AppRoute>()
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.present(.login)))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.presented == .login)
+        #expect(router.presentedStyle == .fullScreenCover)
+    }
+
+    @Test(".pushStack rebuilds the path (the deep-link primitive)")
+    func pushStackRebuilds() async {
+        let router = Router<AppRoute>(path: [.settings])
+        let stack: [AppRoute] = [.root, .detail(id: UUID())]
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.pushStack(stack)))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.path == stack)
+    }
+
+    @Test(".pushStack clears a stale modal before rebuilding")
+    func pushStackClearsStaleModal() async {
+        let router = Router<AppRoute>()
+        router.present(.share(id: UUID()))   // a stale modal is open
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.pushStack([.root, .settings])))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.path == [.root, .settings])
+        #expect(router.presented == nil)
+        #expect(router.presentedStyle == nil)
+    }
+
+    @Test(".pushStackAndPresent rebuilds the path then presents the modal")
+    func pushStackAndPresent() async {
+        let router = Router<AppRoute>()
+        let id = UUID()
+        let stack: [AppRoute] = [.root, .detail(id: id)]
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.pushStackAndPresent(stack, .share(id: id))))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.path == stack)
+        #expect(router.presented == .share(id: id))
+        #expect(router.presentedStyle == .sheet)
+    }
+
+    @Test(".dismiss clears the active modal")
+    func dismissClearsModal() async {
+        let router = Router<AppRoute>()
+        router.present(.share(id: UUID()))
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.dismiss))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.presented == nil)
+        #expect(router.presentedStyle == nil)
+    }
+
+    @Test(".unhandled leaves the router untouched")
+    func unhandled() async {
+        let router = Router<AppRoute>(path: [.settings])
+        let linkRouter = NebulaLinkRouter(
+            router: router, parser: NebulaStubLinkParser(.unhandled))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://x")!))
+        #expect(router.path == [.settings])
+        #expect(router.presented == nil)
+    }
+
+    @Test("a real parser resolves a nebula:// URL into a rebuilt stack")
+    func realParser() async {
+        struct Parser: NebulaLinkParser {
+            typealias Route = AppRoute
+            func resolve(_ link: NebulaLink) -> NebulaLinkDestination<AppRoute> {
+                guard let url = link.url,
+                      let comps = URLComponents(url: url, resolvingAgainstBaseURL: false)
+                else { return .unhandled }
+                var routes: [AppRoute] = [.root]
+                for segment in comps.path.split(separator: "/").map(String.init) {
+                    if segment == "settings" { routes.append(.settings) }
+                    if let id = UUID(uuidString: segment) { routes.append(.detail(id: id)) }
+                }
+                return routes.count > 1 ? .pushStack(routes) : .unhandled
             }
         }
-        return routes
-    }
-}
-
-@Suite("Deep link parsing")
-struct DeepLinkTests {
-
-    @Test("empty/invalid URL stays at root")
-    func emptyURL() {
-        #expect(DeepLink.parse(URL(string: "nebula://app")!) == [.root])
-    }
-
-    @Test("settings segment maps to a route")
-    func settings() {
-        #expect(DeepLink.parse(URL(string: "nebula://app/settings")!) == [.root, .settings])
-    }
-
-    @Test("a uuid segment maps to a detail route")
-    func detail() {
+        let router = Router<AppRoute>()
+        let linkRouter = NebulaLinkRouter(router: router, parser: Parser())
         let id = UUID()
-        let url = URL(string: "nebula://app/detail/\(id.uuidString)")!
-        #expect(DeepLink.parse(url) == [.root, .detail(id: id)])
-    }
-
-    @Test("multi-segment deep link builds the whole stack — replaceStack payload")
-    func multiSegment() {
-        let id = UUID()
-        let url = URL(string: "nebula://app/detail/\(id.uuidString)/settings")!
-        #expect(DeepLink.parse(url) == [.root, .detail(id: id), .settings])
-    }
-
-    @Test("parsed stack round-trips through Router.replaceStack via the async port")
-    @MainActor
-    func replaceStackViaPort() async {
-        let router = Router<AppRoute>(path: [.settings])
-        let port: any NebulaRouter<AppRoute> = router
-        let id = UUID()
-        let url = URL(string: "nebula://app/detail/\(id.uuidString)")!
-        await port.replaceStack(with: DeepLink.parse(url))
+        await linkRouter.open(NebulaLink(url: URL(string: "nebula://app/\(id.uuidString)")!))
         #expect(router.path == [.root, .detail(id: id)])
     }
 }
+
+// MARK: - Type-driven destinations (modals) — Wave III reference pattern
 
 @Suite("Type-driven destinations (modals)")
 struct DestinationTests {

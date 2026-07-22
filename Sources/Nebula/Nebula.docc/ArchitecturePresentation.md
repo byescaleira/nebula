@@ -31,6 +31,10 @@ Compile-time exhaustive handling in `navigationDestination(for: Route.self)`, an
 
 Keeping the typed stack in the router (the outermost presentation circle) keeps the viewmodel testable and deep-link-replayable: a viewmodel calls `router.push(.detail(id:))` with zero knowledge of destination views, and deep-link handling is "parse → `router.replaceStack(with:)`".
 
+### External navigation entries (Wave N21)
+
+Every external navigation entry — deep links, universal links, Spotlight/Handoff/Siri, Home-screen shortcuts, notification taps, in-app "go here" — conforms to the same ``NebulaPresentationRouter``: a ``NebulaLink`` (a `Sendable` normalization of the event) is resolved by an app-provided ``NebulaLinkParser`` port into a ``NebulaLinkDestination`` (`.unhandled`/`.present`/`.pushStack`/`.pushStackAndPresent`/`.dismiss`), then `apply`-ed to the router via an additive ``NebulaPresentationRouter/apply(_:)`` **default extension method** (dismiss-first for stack-rebuilds to clear any stale modal). A ``NebulaLinkRouter`` is the one-line glue (`open(_:)` → `await router.apply(parser.resolve(link))`); a ``NebulaCompositeLinkParser`` registers several parsers (first-non-`.unhandled`-wins). See <doc:ArchitectureDeepLinks> for the six sources, the SwiftUI-native vs app-constructed split, and the atomicity note.
+
 ## Topics
 
 ### Routes & model
@@ -56,3 +60,14 @@ Keeping the typed stack in the router (the outermost presentation circle) keeps 
 ### Test doubles
 - ``NebulaSpyRouter``
 - ``NebulaSpyRouter/Intent``
+
+### External navigation entries (Wave N21)
+- ``NebulaLink``
+- ``NebulaLink/Source``
+- ``NebulaLinkDestination``
+- ``NebulaLinkParser``
+- ``NebulaCompositeLinkParser``
+- ``NebulaLinkRouter``
+- ``NebulaPresentationRouter/apply(_:)``
+- ``NebulaStubLinkParser``
+- ``NebulaSpyLinkParser``

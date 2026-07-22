@@ -62,3 +62,5 @@ Nebula ships ``NebulaFakeRepository``, ``NebulaStubUseCase``, and ``NebulaSpyUse
 - <doc:ArchitectureCompositionRoot>
 - <doc:ArchitectureTesting>
 - <doc:ArchitectureAsync>
+- <doc:ArchitecturePresentation>
+- <doc:ArchitectureDeepLinks>

@@ -53,3 +53,51 @@ public protocol NebulaPresentationRouter<Route>: NebulaRouter {
     /// from the stack. Never both.
     func dismiss() async
 }
+
+// MARK: External navigation entries (Wave N21)
+
+extension NebulaPresentationRouter {
+
+    /// Applies a resolved ``NebulaLinkDestination`` to this router — the single
+    /// source of truth for translating an external navigation entry (deep link,
+    /// universal link, UserActivity, shortcut, notification, or programmatic)
+    /// into router intents.
+    ///
+    /// Stack-rebuild cases (``NebulaLinkDestination/pushStack(_:)`` and
+    /// ``NebulaLinkDestination/pushStackAndPresent(_:_:)`) call `dismiss()`
+    /// **first** to clear any stale modal — `replaceStack(with:)` does not touch
+    /// the modal slot, so without this a sheet/cover left open would persist over
+    /// the freshly rebuilt stack. The `dismiss()` is harmless when no modal is
+    /// active (it pops one, but that pop is immediately erased by the
+    /// `replaceStack` that follows). ``NebulaLinkDestination/present(_:)` and
+    /// ``NebulaLinkDestination/dismiss`` do **not** dismiss first — their
+    /// semantics are additive over the current state.
+    ///
+    /// This is a **default extension method**, not a protocol requirement —
+    /// conformers (``NebulaSpyRouter``, the Meridian `Router`, any app router)
+    /// inherit it automatically; adopting it is opt-in and additive. The
+    /// ``NebulaLinkRouter`` delegates here, so the destination→intents
+    /// translation lives once.
+    ///
+    /// ```swift
+    /// // A deep-link handler resolves a link, then applies the destination.
+    /// await router.apply(parser.resolve(link))
+    /// ```
+    public func apply(_ destination: NebulaLinkDestination<Route>) async {
+        switch destination {
+        case .unhandled:
+            break
+        case .present(let route):
+            await present(route)
+        case .pushStack(let routes):
+            await dismiss()
+            await replaceStack(with: routes)
+        case .pushStackAndPresent(let routes, let modal):
+            await dismiss()
+            await replaceStack(with: routes)
+            await present(modal)
+        case .dismiss:
+            await dismiss()
+        }
+    }
+}
